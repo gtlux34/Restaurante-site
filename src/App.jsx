@@ -1,80 +1,64 @@
-import "./App.css";
+import Home from "./pages/Public/Home";
+import Cardapio from "./pages/Public/Cardapio";
+import Categorias from "./pages/Public/Categorias";
+import Contato from "./pages/Public/Contato";
+import Produto from "./pages/Public/Produto";
+
+import Admin from "./pages/admin/Index";
+import CategoriasAdmin from "./pages/admin/Categorias";
+import Clientes from "./pages/admin/Clientes";
+import Mensagens from "./pages/admin/Mensagens";
+import Pedidos from "./pages/admin/Pedidos";
+import Produtos from "./pages/admin/Produtos";
+
 function App() {
-  return (
-    <>
-      <header>
-        <h1>Restaurante RANGO DOS GURI</h1>
+  const pagina = window.location.pathname;
 
-        <nav>
-          <a href="index.html">Início</a>
-          <a href="cardapio.html">Cardápio</a>
-          <a href="categorias.html">Categorias</a>
-          <a href="contato.html">Contato</a>
-        </nav>
-      </header>
+  if (pagina === "/") {
+    return <Home />;
+  }
 
-      <main>
+  if (pagina === "/cardapio") {
+    return <Cardapio />;
+  }
 
-        <section>
-          <h2>Bem-vindo ao Restaurante RANGO DOS GURI</h2>
+  if (pagina === "/categorias") {
+    return <Categorias />;
+  }
 
-          <p>
-            Sabores especiais preparados com ingredientes selecionados
-            para tornar sua experiência ainda melhor.
-          </p>
+  if (pagina === "/contato") {
+    return <Contato />;
+  }
 
-          <a href="cardapio.html">Ver nosso cardápio</a>
-        </section>
+  if (pagina === "/produto") {
+    return <Produto />;
+  }
 
-        <section>
-          <h2>Produtos em destaque</h2>
+  if (pagina === "/admin") {
+    return <Admin />;
+  }
 
-          <article>
-            <h3>Hambúrguer Especial</h3>
+  if (pagina === "/admin/categorias") {
+    return <CategoriasAdmin />;
+  }
 
-            <p>
-              Hambúrguer artesanal com queijo, alface, tomate e molho especial.
-            </p>
+  if (pagina === "/admin/clientes") {
+    return <Clientes />;
+  }
 
-            <p>R$ 29,90</p>
+  if (pagina === "/admin/mensagens") {
+    return <Mensagens />;
+  }
 
-            <a href="produto.html">Ver detalhes</a>
-          </article>
+  if (pagina === "/admin/pedidos") {
+    return <Pedidos />;
+  }
 
-          <article>
-            <h3>Pizza da Casa</h3>
+  if (pagina === "/admin/produtos") {
+    return <Produtos />;
+  }
 
-            <p>
-              Pizza preparada com massa artesanal e ingredientes selecionados.
-            </p>
-
-            <p>R$ 49,90</p>
-
-            <a href="produto.html">Ver detalhes</a>
-          </article>
-        </section>
-
-        <section>
-          <h2>Conheça nossas categorias</h2>
-
-          <ul>
-            <li>Hambúrgueres</li>
-            <li>Pizzas</li>
-            <li>Bebidas</li>
-            <li>Sobremesas</li>
-          </ul>
-
-          <a href="categorias.html">Ver todas as categorias</a>
-        </section>
-
-      </main>
-
-      <footer>
-        <p>&copy; 2026 Restaurante RANGO DOS GURI</p>
-      </footer>
-    </>
-  )
+  return <h1>Página não encontrada</h1>;
 }
 
-export default App
-
+export default App;
