@@ -3,6 +3,7 @@ import Cardapio from "./pages/Public/Cardapio";
 import Categorias from "./pages/Public/Categorias";
 import Contato from "./pages/Public/Contato";
 import Produto from "./pages/Public/Produto";
+import Login from "./pages/Public/Login";
 
 import Admin from "./pages/admin/Index";
 import CategoriasAdmin from "./pages/admin/Categorias";
@@ -33,6 +34,10 @@ function App() {
   if (pagina === "/produto") {
     return <Produto />;
   }
+
+  if (pagina === "/login") {
+  return <Login />;
+}
 
   if (pagina === "/admin") {
     return <Admin />;

@@ -4,6 +4,7 @@ function CategoriasAdmin() {
       <header>
         <h1>Categorias</h1>
         <a href="/admin">Voltar ao painel</a>
+        <a href="/">← Voltar para o site</a>
       </header>
 
       <nav>
