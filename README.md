@@ -1,16 +1,55 @@
-# React + Vite
+## ✨ Funcionalidades
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- **Cardápio Interativo:** Visualização de pratos divididos por categorias (Entradas, Pratos Principais, Sobremesas, Bebidas) com filtros de busca.
+- **Sistema de Reservas / Pedidos:** Formulário intuitivo para agendamento de mesas ou redirecionamento direto para o WhatsApp.
+- **Design Responsivo:** Interface totalmente adaptada para dispositivos móveis, tablets e desktops.
+- **Informações de Contato e Localização:** Integração com mapa, horários de funcionamento e links para redes sociais.
+- **Performance Otimizada:** Carregamento ultrarrápido graças ao build otimizado do Vite.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🛠️ Tecnologias Utilizadas
 
-## React Compiler
+Este projeto foi desenvolvido utilizando as seguintes tecnologias:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **[React](https://react.dev):** Biblioteca JavaScript para construção de interfaces de usuário.
+- **[Vite](https://vitejs.dev):** Ferramenta de build rápida para desenvolvimento web moderno.
+- **[CSS3 / Tailwind CSS / Styled Components]:** *(Deixe apenas o que você usou para estilização)*
+- **[React Router DOM](https://reactrouter.com):** *(Remova se não usou rotas)* Gerenciamento de rotas da aplicação.
+- **[Lucide React / React Icons]:** *(Deixe a biblioteca de ícones utilizada)* Biblioteca de ícones.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🚀 Como rodar o projeto localmente
+
+Siga os passos abaixo para executar a aplicação na sua máquina:
+
+### Pré-requisitos
+Certifique-se de ter o **[Node.js](https://nodejs.org)** (versão 18 ou superior) instalado em seu computador.
+
+### Passo a passo
+
+1. **Clone este repositório:**
+   ```bash
+   git clone https://github.com
+   ```
+
+2. **Acesse a pasta do projeto:**
+   ```bash
+   cd nome-do-repositorio
+   ```
+
+3. **Instale as dependências:**
+   ```bash
+   npm install
+   ```
+
+4. **Inicie o servidor de desenvolvimento:**
+   ```bash
+   npm run dev
+   ```
+
+5. **Abra no navegador:**
+   Acesse `http://localhost:5173` (ou a porta indicada no seu terminal).
+
+---
