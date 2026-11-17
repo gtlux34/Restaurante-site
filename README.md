@@ -31,7 +31,7 @@ Certifique-se de ter o **[Node.js](https://nodejs.org)** (versão 18 ou superior
 
 1. **Clone este repositório:**
    ```bash
-   git clone https://github.com
+   git clone https://github.com/gtlux34/Restaurante-site
    ```
 
 2. **Acesse a pasta do projeto:**
