@@ -9,6 +9,7 @@ function Produto() {
           <a href="/cardapio">Cardápio</a>
           <a href="/categorias">Categorias</a>
           <a href="/contato">Contato</a>
+          <a href="/login">Entrar</a>
         </nav>
       </header>
 

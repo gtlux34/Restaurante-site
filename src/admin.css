@@ -1,188 +1,496 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  }
+/* ==========================================================
+   RANGO DOS GURI - estilos dos componentes
+   Vale para o site publico E para o painel admin
+   (o main.jsx importa este arquivo para todas as paginas).
+   As cores e fontes vem das variaveis do index.css.
+   ========================================================== */
 
-body {
-font-family: Arial, sans-serif;
-background-color: #f4f4f4;
-color: #333;
-}
-
-/* Cabecalho */
+/* ---------- Cabecalho ---------- */
 
 header {
-background-color: #8b0000;
-color: white;
-padding: 25px 40px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px 28px;
+  padding: 16px 40px;
+  background-color: var(--preto);
+  color: var(--branco);
+  border-bottom: 5px solid var(--amarelo);
+  box-shadow: 0 5px 0 var(--vermelho);
 }
 
 header h1 {
-margin-bottom: 5px;
+  font-size: 2rem;
+  color: var(--amarelo);
+  /* efeito do logo: letra amarela com sombra vermelha */
+  text-shadow: 3px 3px 0 var(--vermelho);
+  transform: rotate(-1.5deg);
+}
+
+header h1::before {
+  content: "\265B"; /* coroa/peca de xadrez, lembra a coroa do logo */
+  margin-right: 10px;
+  font-size: 0.85em;
+  color: var(--amarelo);
+  text-shadow: none;
 }
 
 header p {
-color: #f5dada;
+  color: var(--bege);
+  font-weight: 700;
 }
 
-/* Menu */
+/* link solto dentro do cabecalho (ex.: "Voltar ao painel") */
+header > a {
+  color: var(--amarelo);
+  border: 2px solid var(--amarelo);
+  padding: 6px 18px;
+  border-radius: 999px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+header > a:hover {
+  background-color: var(--amarelo);
+  color: var(--preto);
+}
+
+/* ---------- Menu ---------- */
 
 nav {
-background-color: #5f0000;
-padding: 15px 40px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
 }
 
 nav a {
-color: white;
-text-decoration: none;
-margin-right: 20px;
-font-weight: bold;
+  color: var(--branco);
+  text-decoration: none;
+  font-family: var(--fonte-titulo);
+  font-size: 1.05rem;
+  letter-spacing: 0.4px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  transition: background-color 0.15s, color 0.15s, transform 0.15s;
 }
 
 nav a:hover {
-color: #ffd700;
+  background-color: var(--amarelo);
+  color: var(--preto);
+  transform: translateY(-2px);
 }
 
-/* Conteudo */
+/* link de login/sair em destaque (amarelo) */
+nav a[href="/login"] {
+  background-color: var(--amarelo);
+  color: var(--preto);
+}
+
+nav a[href="/login"]:hover {
+  background-color: var(--branco);
+}
+
+/* menu do admin (fica fora do header): faixa vermelha */
+#root > nav {
+  padding: 12px 40px;
+  background-color: var(--vermelho);
+  border-bottom: 4px solid var(--preto);
+}
+
+/* menu dentro do header: sem fundo proprio */
+header nav {
+  padding: 0;
+  background: transparent;
+}
+
+/* ---------- Conteudo ---------- */
 
 main {
-max-width: 1200px;
-margin: 40px auto;
-padding: 0 25px;
+  max-width: 1100px;
+  margin: 44px auto;
+  padding: 0 24px;
 }
 
 main h2 {
-margin-bottom: 20px;
+  position: relative;
+  isolation: isolate;
+  display: block;
+  width: fit-content; /* a pincelada acompanha o tamanho do texto */
+  max-width: 100%;
+  margin-bottom: 30px;
+  font-size: 2.3rem;
+  color: var(--preto);
 }
 
-main p {
-margin-bottom: 15px;
+/* pincelada vermelha embaixo do titulo, como no logo */
+main h2::after {
+  content: "";
+  position: absolute;
+  left: -4px;
+  right: -10px;
+  bottom: -8px;
+  height: 8px;
+  background: var(--vermelho);
+  border-radius: 8px;
+  transform: rotate(-1deg);
+  z-index: -1;
 }
 
-/* Produtos */
+main > p,
+section > p {
+  max-width: 70ch;
+  margin-bottom: 16px;
+  color: var(--cinza-texto);
+}
+
+/* ---------- Secoes ---------- */
 
 section {
-margin-top: 30px;
+  margin-top: 36px;
+}
+
+main > section + section {
+  padding-top: 30px;
+  border-top: 3px dashed rgba(107, 63, 29, 0.35);
 }
 
 section h3 {
-margin-bottom: 20px;
+  margin-bottom: 20px;
+  padding-left: 14px;
+  font-size: 1.7rem;
+  color: var(--vermelho);
+  border-left: 8px solid var(--amarelo);
 }
+
+/* secoes que tem cards viram grade */
+section:has(> article) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 290px), 1fr));
+  gap: 24px;
+}
+
+section:has(> article) > :not(article) {
+  grid-column: 1 / -1;
+  margin-bottom: 0;
+}
+
+/* ---------- Cards (produtos e paineis) ---------- */
 
 article {
-background-color: white;
-padding: 25px;
-margin-bottom: 20px;
-border: 1px solid #ddd;
-border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 24px;
+  background-color: var(--branco);
+  border: var(--contorno);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra-dura);
+  transition: transform 0.15s, box-shadow 0.15s;
 }
 
+article:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--sombra-dura-hover);
+}
+
+article h3,
 article h4 {
-color: #8b0000;
-margin-bottom: 10px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 1.5rem;
+  color: var(--preto);
 }
 
 article p {
-color: #666;
+  margin: 0;
+  color: var(--cinza-texto);
 }
 
-/* Botoes */
+/* o segundo paragrafo do card e o preco: vira etiqueta amarela */
+article p + p {
+  display: inline-block;
+  padding: 2px 14px;
+  background-color: var(--amarelo);
+  color: var(--preto);
+  border: 2px solid var(--preto);
+  border-radius: 999px;
+  font-family: var(--fonte-titulo);
+  font-size: 1.3rem;
+  transform: rotate(-2deg);
+}
+
+/* empurra o botao para o fim do card, alinhando a grade */
+article a {
+  margin-top: auto;
+}
+
+/* ---------- Botoes ---------- */
 
 a {
-color: #8b0000;
+  color: var(--vermelho);
+  font-weight: 800;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  color: var(--vermelho-escuro);
 }
 
 article a,
-main > a {
-display: inline-block;
-background-color: #8b0000;
-color: white;
-padding: 10px 15px;
-margin-top: 5px;
-border-radius: 5px;
-text-decoration: none;
+main > a,
+section > a,
+form button {
+  display: inline-block;
+  padding: 10px 22px;
+  background-color: var(--vermelho);
+  color: var(--branco);
+  font-family: var(--fonte-titulo);
+  font-size: 1.05rem;
+  letter-spacing: 0.4px;
+  text-decoration: none;
+  border: 3px solid var(--preto);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--preto);
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s, transform 0.15s,
+    box-shadow 0.15s;
 }
 
 article a:hover,
-main > a:hover {
-background-color: #5f0000;
+main > a:hover,
+section > a:hover,
+form button:hover {
+  background-color: var(--amarelo);
+  color: var(--preto);
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--preto);
 }
 
-/* Tabela */
+article a:active,
+main > a:active,
+section > a:active,
+form button:active {
+  transform: translate(3px, 3px);
+  box-shadow: 0 0 0 var(--preto);
+}
+
+main > a {
+  margin-top: 6px;
+}
+
+/* ---------- Listas ---------- */
+
+main ul {
+  list-style: none;
+  margin: 0 0 20px;
+}
+
+main li {
+  position: relative;
+  padding: 4px 0 4px 30px;
+  font-weight: 600;
+}
+
+main li::before {
+  content: "\265B";
+  position: absolute;
+  left: 0;
+  top: 3px;
+  color: var(--vermelho);
+}
+
+/* ---------- Tabelas (admin) ---------- */
 
 table {
-width: 100%;
-border-collapse: collapse;
-background-color: white;
-margin-top: 20px;
+  width: 100%;
+  margin-top: 20px;
+  border: var(--contorno);
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: var(--raio);
+  overflow: hidden;
+  background-color: var(--branco);
+  box-shadow: var(--sombra-dura);
+}
+
+th,
+td {
+  border: 0;
+  padding: 14px 16px;
+  text-align: left;
 }
 
 th {
-background-color: #8b0000;
-color: white;
-padding: 12px;
-text-align: left;
+  background-color: var(--preto);
+  color: var(--amarelo);
+  font-family: var(--fonte-titulo);
+  font-weight: 400;
+  font-size: 1.05rem;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
 }
 
 td {
-padding: 12px;
-border-bottom: 1px solid #ddd;
+  border-bottom: 2px solid rgba(107, 63, 29, 0.18);
+}
+
+tbody tr:nth-child(even) td {
+  background-color: var(--creme);
+}
+
+tbody tr:hover td {
+  background-color: #fff3b0;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+td:last-child {
+  white-space: nowrap;
 }
 
 td a {
-background-color: #8b0000;
-color: white;
-padding: 6px 10px;
-border-radius: 4px;
-text-decoration: none;
+  display: inline-block;
+  margin-right: 6px;
+  padding: 5px 14px;
+  background-color: var(--vermelho);
+  color: var(--branco);
+  font-size: 0.9rem;
+  text-decoration: none;
+  border: 2px solid var(--preto);
+  border-radius: 999px;
+  transition: background-color 0.15s, color 0.15s;
 }
 
 td a:hover {
-background-color: #5f0000;
+  background-color: var(--amarelo);
+  color: var(--preto);
 }
 
-/* Rodape */
+/* ---------- Formularios ---------- */
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 640px;
+  padding: 28px;
+  background-color: var(--branco);
+  border: var(--contorno);
+  border-radius: var(--raio);
+  box-shadow: var(--sombra-dura);
+}
+
+label {
+  margin-top: 10px;
+  font-weight: 800;
+  color: var(--marrom);
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select {
+  width: 100%;
+  padding: 12px 14px;
+  font-family: inherit;
+  font-size: 1rem;
+  color: var(--preto);
+  background-color: var(--creme);
+  border: 3px solid var(--preto);
+  border-radius: 10px;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: var(--vermelho);
+  box-shadow: 4px 4px 0 var(--amarelo);
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+form button {
+  align-self: flex-start;
+  margin-top: 18px;
+}
+
+/* ---------- Rodape ---------- */
 
 footer {
-margin-top: 50px;
-background-color: #5f0000;
-color: white;
-text-align: center;
-padding: 20px;
+  margin-top: 60px;
+  padding: 26px 20px;
+  background-color: var(--preto);
+  color: var(--amarelo);
+  text-align: center;
+  border-top: 6px solid var(--vermelho);
 }
 
-/* Celular */
+footer p {
+  margin: 0;
+  font-family: var(--fonte-titulo);
+  letter-spacing: 0.6px;
+}
+
+/* ---------- Celular ---------- */
 
 @media (max-width: 700px) {
+  header {
+    padding: 14px 18px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
+  header h1 {
+    font-size: 1.6rem;
+  }
 
-header {
+  nav a {
+    padding: 6px 12px;
+    font-size: 1rem;
+  }
+
+  #root > nav {
+    padding: 12px 18px;
+  }
+
+  main {
+    margin: 28px auto;
+    padding: 0 16px;
+  }
+
+  main h2 {
+    font-size: 1.9rem;
+  }
+
+  section h3 {
+    font-size: 1.45rem;
+  }
+
+  article {
     padding: 20px;
-}
+  }
 
-nav {
-    padding: 15px 20px;
-}
-
-nav a {
-    display: inline-block;
-    margin-bottom: 5px;
-}
-
-main {
-    margin: 25px auto;
-    padding: 0 15px;
-}
-
-article {
+  form {
     padding: 20px;
-}
+  }
 
-table {
+  table {
     display: block;
     overflow-x: auto;
-}
-
-
+  }
 }

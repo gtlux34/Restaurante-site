@@ -1,3 +1,93 @@
+/* ==========================================================
+   RANGO DOS GURI - base do site
+   Paleta e tipografia tiradas do Guia de Marca.
+   Este arquivo e carregado primeiro (main.jsx), entao as
+   variaveis abaixo ficam disponiveis para todos os outros CSS.
+   ========================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@400;600;700;800&display=swap");
+
+:root {
+  /* Paleta oficial */
+  --amarelo: #ffd700;
+  --vermelho: #e10600;
+  --preto: #0b0b0b;
+  --branco: #ffffff;
+  --bege: #f4e7c1;
+  --marrom: #6b3f1d;
+  --laranja: #ff8c00;
+  --creme: #f7f1e3;
+
+  /* Tons derivados (hover, bordas suaves) */
+  --vermelho-escuro: #b30500;
+  --amarelo-escuro: #e6c200;
+  --marrom-claro: #8a5a33;
+  --cinza-texto: #4a4036;
+
+  /* Tipografia */
+  --fonte-titulo: "Lilita One", "Arial Black", Impact, sans-serif;
+  --fonte-texto: "Nunito", "Segoe UI", Arial, sans-serif;
+
+  /* Estilo "adesivo": contorno preto + sombra dura */
+  --contorno: 3px solid var(--preto);
+  --sombra-dura: 5px 5px 0 var(--preto);
+  --sombra-dura-hover: 7px 7px 0 var(--preto);
+  --raio: 14px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   margin: 0;
+  min-height: 100vh;
+  font-family: var(--fonte-texto);
+  font-size: 17px;
+  line-height: 1.6;
+  color: var(--preto);
+  background-color: var(--bege);
+  /* leve textura de "papel" com pontinhos */
+  background-image: radial-gradient(
+    rgba(107, 63, 29, 0.09) 1.2px,
+    transparent 1.2px
+  );
+  background-size: 22px 22px;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--fonte-titulo);
+  font-weight: 400; /* Lilita One ja e pesada */
+  letter-spacing: 0.3px;
+  line-height: 1.15;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+::selection {
+  background: var(--amarelo);
+  color: var(--preto);
+}
+
+:focus-visible {
+  outline: 3px solid var(--laranja);
+  outline-offset: 3px;
 }

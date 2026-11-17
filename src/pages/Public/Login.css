@@ -1,321 +1,370 @@
-.login-page {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-    color: #222;
-    min-height: 100vh;
-}
-
-.login-page *,
-.login-page *::before,
-.login-page *::after {
-    box-sizing: border-box;
-}
+/* ==========================================================
+   RANGO DOS GURI - tela de login
+   Tudo escopado em .login-page para nao vazar para o resto.
+   Como o admin.css tem estilos globais (header, nav, main,
+   section, form...), aqui a gente so ajusta o que muda.
+   ========================================================== */
 
 .login-page {
-    scroll-behavior: smooth;
+  min-height: 100vh;
+  color: var(--preto);
 }
+
+/* ---------- Cabecalho ---------- */
 
 .login-page header {
-    width: 100%;
-    height: 70px;
-    background: #ffffff;
-    border-bottom: 1px solid #dddddd;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 50px;
-}
-
-.login-page header h1 {
-    color: #d62828;
-    font-size: 22px;
+  flex-direction: row;
+  align-items: center;
+  min-height: 76px;
+  padding: 0 50px;
 }
 
 .login-page nav ul {
-    display: flex;
-    align-items: center;
-    gap: 30px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
-.login-page nav a {
-    color: #333333;
-    text-decoration: none;
-    font-size: 14px;
+.login-page nav li {
+  padding: 0;
 }
 
-.login-page nav a:hover {
-    color: #d62828;
+.login-page nav li::before {
+  content: none;
 }
 
 .login-page .botao-entrar {
-    background: #d62828;
-    color: #ffffff;
-    text-decoration: none;
-    padding: 11px 20px;
-    border-radius: 5px;
-    font-size: 14px;
-    font-weight: bold;
+  padding: 9px 24px;
+  background: var(--amarelo);
+  color: var(--preto);
+  font-family: var(--fonte-titulo);
+  font-size: 1.05rem;
+  text-decoration: none;
+  border: 3px solid var(--preto);
+  border-radius: 999px;
+  box-shadow: 3px 3px 0 var(--vermelho);
+  transition: transform 0.15s, box-shadow 0.15s, background-color 0.15s;
 }
 
 .login-page .botao-entrar:hover {
-    background: #b71c1c;
+  background: var(--branco);
+  color: var(--preto);
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--vermelho);
 }
+
+/* ---------- Estrutura (anula o "main" e "section" globais) ---------- */
 
 .login-page main {
-    width: 100%;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
 }
 
+.login-page section {
+  margin-top: 0;
+  border-top: 0;
+}
+
+/* ---------- Inicio: apresentacao + caixa de login ---------- */
+
 .login-page .inicio {
-    min-height: calc(100vh - 70px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 100px;
-    padding: 50px;
+  min-height: calc(100vh - 76px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 90px;
+  padding: 50px;
 }
 
 .login-page .apresentacao {
-    width: 380px;
+  width: 400px;
 }
 
 .login-page .apresentacao span {
-    color: #d62828;
-    font-size: 12px;
-    font-weight: bold;
+  display: inline-block;
+  margin-bottom: 16px;
+  padding: 4px 14px;
+  background: var(--amarelo);
+  color: var(--preto);
+  font-family: var(--fonte-titulo);
+  font-size: 0.95rem;
+  letter-spacing: 1px;
+  border: 2px solid var(--preto);
+  border-radius: 999px;
+  transform: rotate(-3deg);
 }
 
 .login-page .apresentacao h2 {
-    font-size: 38px;
-    margin: 12px 0;
+  display: block;
+  margin-bottom: 18px;
+  font-size: 3.2rem;
+  line-height: 1.05;
+}
+
+.login-page .apresentacao h2::after {
+  display: none;
 }
 
 .login-page .apresentacao p {
-    color: #666666;
-    font-size: 15px;
-    line-height: 1.5;
+  color: var(--cinza-texto);
+  font-size: 1.1rem;
+  line-height: 1.6;
 }
 
+/* ---------- Caixa de login ---------- */
+
 .login-page .autenticacao {
-    width: 400px;
-    background: #ffffff;
-    padding: 35px;
-    border: 1px solid #dddddd;
-    border-radius: 8px;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.06);
+  width: 420px;
+  padding: 36px;
+  background: var(--branco);
+  border: var(--contorno);
+  border-radius: 18px;
+  box-shadow: 8px 8px 0 var(--preto);
 }
 
 .login-page .autenticacao-cabecalho {
-    margin-bottom: 25px;
+  margin-bottom: 26px;
 }
 
 .login-page .autenticacao-cabecalho h2 {
-    font-size: 25px;
-    margin-bottom: 6px;
+  margin-bottom: 14px;
+  font-size: 2.2rem;
 }
 
 .login-page .autenticacao-cabecalho p {
-    color: #666666;
-    font-size: 14px;
+  color: var(--cinza-texto);
+  font-size: 0.95rem;
 }
 
+/* o form global vira "card"; aqui ele ja esta dentro de um */
 .login-page form {
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
+  gap: 18px;
+  max-width: none;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .login-page .campo {
-    display: flex;
-    flex-direction: column;
-    gap: 7px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }
 
 .login-page .campo label {
-    font-size: 14px;
-    font-weight: bold;
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--preto);
 }
 
 .login-page .campo input {
-    width: 100%;
-    height: 46px;
-    border: 1px solid #cccccc;
-    border-radius: 5px;
-    padding: 0 12px;
-    font-size: 14px;
-    outline: none;
-}
-
-.login-page .campo input:focus {
-    border-color: #d62828;
+  height: 48px;
 }
 
 .login-page .opcoes-login {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.85rem;
 }
 
 .login-page .opcoes-login label {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  font-weight: 700;
+  color: var(--preto);
+}
+
+.login-page .opcoes-login input[type="checkbox"] {
+  accent-color: var(--vermelho);
+  width: 16px;
+  height: 16px;
 }
 
 .login-page .opcoes-login a {
-    color: #d62828;
-    text-decoration: none;
+  color: var(--vermelho);
+  text-decoration: none;
+}
+
+.login-page .opcoes-login a:hover {
+  text-decoration: underline;
 }
 
 .login-page form button {
-    width: 100%;
-    height: 46px;
-    background: #d62828;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.login-page form button:hover {
-    background: #b71c1c;
+  width: 100%;
+  align-self: stretch;
+  height: 50px;
+  margin-top: 4px;
+  font-size: 1.2rem;
 }
 
 .login-page .cadastro {
-    margin-top: 25px;
-    padding-top: 20px;
-    border-top: 1px solid #eeeeee;
-    text-align: center;
-    font-size: 13px;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 3px dashed rgba(107, 63, 29, 0.35);
+  text-align: center;
+  font-size: 0.95rem;
 }
 
 .login-page .cadastro p {
-    color: #666666;
-    margin-bottom: 7px;
+  margin-bottom: 6px;
+  color: var(--cinza-texto);
 }
 
 .login-page .cadastro a {
-    color: #d62828;
-    text-decoration: none;
-    font-weight: bold;
+  color: var(--vermelho);
+  font-weight: 800;
+  text-decoration: none;
 }
+
+.login-page .cadastro a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Cardapio (faixa amarela com botao) ---------- */
 
 .login-page .cardapio {
-    min-height: 400px;
-    padding: 80px 50px;
-    background: #ffffff;
+  min-height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 80px 50px;
+  background: var(--amarelo);
+  border-top: 5px solid var(--preto);
+  border-bottom: 5px solid var(--preto);
 }
 
-.login-page .cardapio h2 {
-    color: #d62828;
-    font-size: 30px;
+.login-page .cardapio a {
+  padding: 14px 40px;
+  font-size: 1.6rem;
 }
+
+/* ---------- Contato ---------- */
 
 .login-page .contato {
-    min-height: 400px;
-    padding: 80px 50px;
-    background: #f5f5f5;
+  min-height: 300px;
+  padding: 80px 50px;
 }
 
 .login-page .contato-conteudo {
-    max-width: 800px;
-    margin: 0 auto;
+  max-width: 800px;
+  margin: 0 auto;
 }
 
 .login-page .contato-conteudo span {
-    color: #d62828;
-    font-size: 12px;
-    font-weight: bold;
+  display: inline-block;
+  padding: 4px 14px;
+  background: var(--vermelho);
+  color: var(--branco);
+  font-family: var(--fonte-titulo);
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+  border: 2px solid var(--preto);
+  border-radius: 999px;
 }
 
 .login-page .contato-conteudo h2 {
-    margin: 10px 0 30px;
-    font-size: 30px;
+  margin: 14px 0 34px;
+  font-size: 2.4rem;
 }
 
 .login-page .contato-info {
-    display: flex;
-    gap: 60px;
+  display: flex;
+  gap: 60px;
 }
 
 .login-page .contato-info strong {
-    color: #222222;
+  font-family: var(--fonte-titulo);
+  font-weight: 400;
+  font-size: 1.2rem;
+  color: var(--marrom);
 }
 
 .login-page .contato-info p {
-    color: #666666;
-    margin-top: 7px;
+  margin-top: 6px;
+  color: var(--cinza-texto);
+}
+
+/* ---------- Tablet / celular ---------- */
+
+@media (max-width: 900px) {
+  .login-page .inicio {
+    gap: 40px;
+  }
+
+  .login-page .apresentacao h2 {
+    font-size: 2.6rem;
+  }
 }
 
 @media (max-width: 800px) {
+  .login-page header {
+    padding: 14px 20px;
+  }
 
-    .login-page header {
-        padding: 0 20px;
-    }
+  .login-page nav ul {
+    gap: 4px;
+  }
 
-    .login-page nav ul {
-        gap: 15px;
-    }
+  .login-page .inicio {
+    flex-direction: column;
+    gap: 35px;
+    padding: 40px 20px;
+  }
 
-    .login-page .inicio {
-        flex-direction: column;
-        gap: 35px;
-        padding: 40px 20px;
-    }
-
-    .login-page .apresentacao {
-        width: 100%;
-        max-width: 400px;
-    }
-
-    .login-page .autenticacao {
-        width: 100%;
-        max-width: 400px;
-    }
+  .login-page .apresentacao,
+  .login-page .autenticacao {
+    width: 100%;
+    max-width: 420px;
+  }
 }
 
 @media (max-width: 550px) {
+  .login-page header {
+    flex-direction: row;
+    align-items: center;
+    min-height: 70px;
+    gap: 12px;
+  }
 
-    .login-page header {
-        height: auto;
-        min-height: 70px;
-        gap: 15px;
-    }
+  .login-page header h1 {
+    font-size: 1.4rem;
+  }
 
-    .login-page header h1 {
-        font-size: 18px;
-    }
+  .login-page nav {
+    display: none;
+  }
 
-    .login-page nav {
-        display: none;
-    }
+  .login-page .botao-entrar {
+    padding: 8px 18px;
+  }
 
-    .login-page .botao-entrar {
-        padding: 9px 15px;
-    }
+  .login-page .apresentacao h2 {
+    font-size: 2.2rem;
+  }
 
-    .login-page .autenticacao {
-        padding: 25px 20px;
-    }
+  .login-page .autenticacao {
+    padding: 26px 20px;
+    box-shadow: 5px 5px 0 var(--preto);
+  }
 
-    .login-page .cardapio {
-        padding: 60px 20px;
-    }
+  .login-page .cardapio,
+  .login-page .contato {
+    padding: 60px 20px;
+  }
 
-    .login-page .contato {
-        padding: 60px 20px;
-    }
-
-    .login-page .contato-info {
-        flex-direction: column;
-        gap: 25px;
-    }
+  .login-page .contato-info {
+    flex-direction: column;
+    gap: 25px;
+  }
 }

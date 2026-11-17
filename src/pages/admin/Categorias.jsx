@@ -13,6 +13,7 @@ function CategoriasAdmin() {
         <a href="/admin/pedidos">Pedidos</a>
         <a href="/admin/clientes">Clientes</a>
         <a href="/admin/mensagens">Mensagens</a>
+        <a href="/login">Sair</a>
       </nav>
 
       <main>
