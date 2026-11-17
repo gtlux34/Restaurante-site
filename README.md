@@ -36,7 +36,7 @@ Certifique-se de ter o **[Node.js](https://nodejs.org)** (versão 18 ou superior
 
 2. **Acesse a pasta do projeto:**
    ```bash
-   cd nome-do-repositorio
+   cd restaurante
    ```
 
 3. **Instale as dependências:**
