@@ -1,4 +1,4 @@
-## ✨ Funcionalidades
+##  Funcionalidades
 
 - **Cardápio Interativo:** Visualização de pratos divididos por categorias (Entradas, Pratos Principais, Sobremesas, Bebidas) com filtros de busca.
 - **Sistema de Reservas / Pedidos:** Formulário intuitivo para agendamento de mesas ou redirecionamento direto para o WhatsApp.
@@ -8,7 +8,7 @@
 
 ---
 
-## 🛠️ Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 Este projeto foi desenvolvido utilizando as seguintes tecnologias:
 
@@ -20,7 +20,7 @@ Este projeto foi desenvolvido utilizando as seguintes tecnologias:
 
 ---
 
-## 🚀 Como rodar o projeto localmente
+##  Como rodar o projeto localmente
 
 Siga os passos abaixo para executar a aplicação na sua máquina:
 
