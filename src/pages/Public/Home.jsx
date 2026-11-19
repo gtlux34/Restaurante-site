@@ -1,71 +1,203 @@
 
-function Home() {
-  return (
-    <>
-      <header>
-        <h1>Restaurante RANGO DOS GURI</h1>
+import { useEffect, useState } from "react";
+import { supabase } from "../../supabase";
 
-        <nav>
-          <a href="/">Início</a>
+function Home() {
+  const [produtos, setProdutos] = useState([]);
+  const [categorias, setCategorias] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+
+  useEffect(() => {
+    async function carregarDados() {
+      const [resultadoProdutos, resultadoCategorias] = await Promise.all([
+        supabase
+          .from("produtos")
+          .select("*")
+          .eq("disponivel", true)
+          .order("id")
+          .limit(4),
+
+        supabase
+          .from("categorias")
+          .select("*")
+          .order("id")
+          .limit(4),
+      ]);
+
+      if (!resultadoProdutos.error) {
+        setProdutos(resultadoProdutos.data || []);
+      }
+
+      if (!resultadoCategorias.error) {
+        setCategorias(resultadoCategorias.data || []);
+      }
+
+      setCarregando(false);
+    }
+
+    carregarDados();
+  }, []);
+
+  function formatarPreco(preco) {
+    return Number(preco).toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
+  }
+
+  return (
+    <div className="home-page">
+      <header className="home-header">
+        <a href="/" className="home-logo">
+          <span>RANGO</span>
+          <strong>DOS GURI</strong>
+        </a>
+
+        <nav className="home-nav">
+          <a href="/" className="ativo">Início</a>
           <a href="/cardapio">Cardápio</a>
           <a href="/categorias">Categorias</a>
           <a href="/contato">Contato</a>
-          <a href="/login">Entrar</a>
+          <a href="/login" className="home-login">Entrar</a>
         </nav>
       </header>
 
-      <main>
-        <section>
-          <h2>Bem-vindo ao Restaurante RANGO DOS GURI</h2>
+      <main className="home-main">
+        <section className="home-hero">
+          <div className="home-hero-conteudo">
+            <span className="home-etiqueta">
+              ★ O SEU RESTAURANTE FAVORITO
+            </span>
 
-          <p>
-            Sabores especiais preparados com ingredientes selecionados
-            para tornar sua experiência ainda melhor.
-          </p>
+            <h1>
+              BATEU A FOME?
+              <br />
+              <span>VEM PRO RANGO!</span>
+            </h1>
 
-          <a href="/cardapio">Ver nosso cardápio</a>
+            <p>
+              Sabor de verdade, comida caprichada e aquele gostinho
+              que dá vontade de pedir de novo.
+            </p>
+
+            <a href="/cardapio" className="home-botao">
+              VER NOSSO CARDÁPIO <span>→</span>
+            </a>
+
+            <div className="home-frase">
+              FEITO COM SABOR. SERVIDO COM CARINHO.
+            </div>
+          </div>
+
+          <div className="home-hero-mascote">
+            <img
+              src="/mascote.png"
+              alt="Mascote do RANGO DOS GURI"
+            />
+          </div>
         </section>
 
-        <section>
-          <h2>Produtos em destaque</h2>
+        <section className="home-produtos">
+          <div className="home-titulo-secao">
+            <div>
+              <span className="home-subtitulo">ESCOLHAS DELICIOSAS</span>
+              <h2>EM DESTAQUE</h2>
+            </div>
 
-          <article>
-            <h3>Hambúrguer Especial</h3>
-            <p>
-              Hambúrguer artesanal com queijo, alface, tomate e molho especial.
-            </p>
-            <p>R$ 29,90</p>
-            <a href="/produto">Ver detalhes</a>
-          </article>
+            <a href="/cardapio">VER CARDÁPIO →</a>
+          </div>
 
-          <article>
-            <h3>Pizza da Casa</h3>
-            <p>
-              Pizza preparada com massa artesanal e ingredientes selecionados.
+          {carregando ? (
+            <p className="home-mensagem">Carregando produtos...</p>
+          ) : produtos.length === 0 ? (
+            <p className="home-mensagem">
+              Nenhum produto disponível no momento.
             </p>
-            <p>R$ 49,90</p>
-            <a href="/produto">Ver detalhes</a>
-          </article>
+          ) : (
+            <div className="home-produtos-grid">
+              {produtos.map((produto) => (
+                <article className="home-produto-card" key={produto.id}>
+                  <a
+                    href={`/produto?id=${produto.id}`}
+                    className="home-produto-imagem"
+                  >
+                    {produto.imagem ? (
+                      <img src={produto.imagem} alt={produto.nome} />
+                    ) : (
+                      <div className="home-sem-imagem">RANGO!</div>
+                    )}
+                  </a>
+
+                  <div className="home-produto-info">
+                    <h3>{produto.nome}</h3>
+
+                    <p>
+                      {produto.descricao || "Uma delícia esperando por você!"}
+                    </p>
+
+                    <div className="home-produto-rodape">
+                      <strong>{formatarPreco(produto.preco)}</strong>
+                      <a href={`/produto?id=${produto.id}`}>
+                        Ver detalhes →
+                      </a>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          )}
         </section>
 
-        <section>
-          <h2>Conheça nossas categorias</h2>
+        <section className="home-categorias">
+          <div className="home-titulo-secao">
+            <div>
+              <span className="home-subtitulo">TEM PRA TODO GOSTO</span>
+              <h2>EXPLORE AS CATEGORIAS</h2>
+            </div>
+          </div>
 
-          <ul>
-            <li>Hambúrgueres</li>
-            <li>Pizzas</li>
-            <li>Bebidas</li>
-            <li>Sobremesas</li>
-          </ul>
+          {categorias.length === 0 ? (
+            <p className="home-mensagem">
+              Confira todas as opções no nosso cardápio.
+            </p>
+          ) : (
+            <div className="home-categorias-grid">
+              {categorias.map((categoria) => (
+                <a
+                  href="/categorias"
+                  className="home-categoria-card"
+                  key={categoria.id}
+                >
+                  <span>🍽️</span>
+                  <h3>{categoria.nome}</h3>
+                  <strong>CONFERIR →</strong>
+                </a>
+              ))}
+            </div>
+          )}
 
-          <a href="/categorias">Ver todas as categorias</a>
+          <a href="/categorias" className="home-link-categorias">
+            VER TODAS AS CATEGORIAS →
+          </a>
+        </section>
+
+        <section className="home-chamada">
+          <h2>JÁ ESCOLHEU O SEU RANGO DE HOJE?</h2>
+          <p>Não passe vontade. Confira nosso cardápio!</p>
+          <a href="/cardapio" className="home-botao">
+            FAZER MEU PEDIDO →
+          </a>
         </section>
       </main>
 
-      <footer>
-        <p>&copy; 2026 Restaurante RANGO DOS GURI</p>
+      <footer className="home-footer">
+        <a href="/" className="home-logo">
+          <span>RANGO</span>
+          <strong>DOS GURI</strong>
+        </a>
+        <p>© 2026 RANGO DOS GURI. Todos os direitos reservados.</p>
       </footer>
-    </>
+    </div>
   );
 }
 
