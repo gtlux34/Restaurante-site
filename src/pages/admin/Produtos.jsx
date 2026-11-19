@@ -9,6 +9,7 @@ function Produtos() {
   const [salvando, setSalvando] = useState(false);
   const [erro, setErro] = useState("");
   const [editando, setEditando] = useState(null);
+  const [imagemErro, setImagemErro] = useState(false);
 
   const formularioInicial = {
     nome: "",
@@ -49,6 +50,10 @@ function Produtos() {
   function atualizarCampo(event) {
     const { name, value, type, checked } = event.target;
 
+    if (name === "imagem") {
+      setImagemErro(false);
+    }
+
     setFormulario((anterior) => ({
       ...anterior,
       [name]: type === "checkbox" ? checked : value,
@@ -57,6 +62,7 @@ function Produtos() {
 
   function prepararEdicao(produto) {
     setEditando(produto.id);
+    setImagemErro(false);
 
     setFormulario({
       nome: produto.nome || "",
@@ -73,6 +79,7 @@ function Produtos() {
   function cancelarEdicao() {
     setEditando(null);
     setFormulario({ ...formularioInicial });
+    setImagemErro(false);
   }
 
   async function salvarProduto(event) {
@@ -122,6 +129,9 @@ function Produtos() {
     }
   }
 
+  const imagemValida = formulario.imagem.trim().startsWith("https://") ||
+    formulario.imagem.trim().startsWith("http://");
+
   return (
     <>
       <header>
@@ -137,45 +147,46 @@ function Produtos() {
         <a href="/admin/mensagens">Mensagens</a>
       </nav>
 
-      <main>
+      <main className="produtos-admin">
         <h2>Gerenciar Produtos</h2>
-
-        <h2 style={{ color: "red" }}>
-          TESTE - NOVO PAINEL SUPABASE
-        </h2>
+        <p>Cadastre e organize os produtos do seu cardápio.</p>
 
         {erro && (
-          <p style={{ color: "red" }}>
+          <div className="produto-mensagem-erro">
             {erro}
-          </p>
+          </div>
         )}
 
-        <section>
-          <h3>{editando !== null ? "Editar produto" : "Cadastrar produto"}</h3>
+        <section className="produto-formulario">
+          <h3>
+            {editando !== null ? "Editar produto" : "Cadastrar novo produto"}
+          </h3>
 
           <form onSubmit={salvarProduto}>
-            <p>
-              <label>Nome do produto</label><br />
+            <div className="produto-campo">
+              <label>Nome do produto</label>
               <input
                 name="nome"
                 value={formulario.nome}
                 onChange={atualizarCampo}
+                placeholder="Ex: X-RANGO"
                 required
               />
-            </p>
+            </div>
 
-            <p>
-              <label>Descrição</label><br />
+            <div className="produto-campo">
+              <label>Descrição</label>
               <textarea
                 name="descricao"
                 value={formulario.descricao}
                 onChange={atualizarCampo}
+                placeholder="Descreva os ingredientes e detalhes do produto..."
                 required
               />
-            </p>
+            </div>
 
-            <p>
-              <label>Preço (R$)</label><br />
+            <div className="produto-campo">
+              <label>Preço (R$)</label>
               <input
                 type="number"
                 name="preco"
@@ -183,23 +194,58 @@ function Produtos() {
                 step="0.01"
                 value={formulario.preco}
                 onChange={atualizarCampo}
+                placeholder="Ex: 29.90"
                 required
               />
-            </p>
+            </div>
 
-            <p>
-              <label>URL da imagem</label><br />
+            <div className="produto-campo">
+              <label>URL da imagem</label>
               <input
                 type="url"
                 name="imagem"
                 value={formulario.imagem}
                 onChange={atualizarCampo}
-                placeholder="https://..."
+                placeholder="Cole aqui o endereço da imagem (https://...)"
               />
-            </p>
+              <small>
+                Cole o link direto de uma imagem para visualizar a prévia.
+              </small>
+            </div>
 
-            <p>
-              <label>Categoria</label><br />
+            <div className="produto-preview">
+              <div className="produto-preview-topo">
+                <strong>Pré-visualização da imagem</strong>
+                <span>PRÉVIA</span>
+              </div>
+
+              {imagemValida && !imagemErro ? (
+                <img
+                  src={formulario.imagem.trim()}
+                  alt="Prévia do produto"
+                  onError={() => setImagemErro(true)}
+                />
+              ) : (
+                <div className="produto-preview-vazio">
+                  {imagemErro ? (
+                    <>
+                      <span>⚠️</span>
+                      <p>Não foi possível carregar esta imagem.</p>
+                      <small>Confira se o link está correto.</small>
+                    </>
+                  ) : (
+                    <>
+                      <span>🍔</span>
+                      <p>A imagem do produto aparecerá aqui</p>
+                      <small>Adicione uma URL acima</small>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div className="produto-campo">
+              <label>Categoria</label>
               <select
                 name="categoria_id"
                 value={formulario.categoria_id}
@@ -213,37 +259,41 @@ function Produtos() {
                   </option>
                 ))}
               </select>
-            </p>
+            </div>
 
-            <p>
-              <label>
-                <input
-                  type="checkbox"
-                  name="disponivel"
-                  checked={formulario.disponivel}
-                  onChange={atualizarCampo}
-                />
-                Produto disponível
-              </label>
-            </p>
+            <label className="produto-disponivel">
+              <input
+                type="checkbox"
+                name="disponivel"
+                checked={formulario.disponivel}
+                onChange={atualizarCampo}
+              />
+              Produto disponível para venda
+            </label>
 
-            <button type="submit" disabled={salvando}>
-              {salvando
-                ? "Salvando..."
-                : editando !== null
-                  ? "Salvar alterações"
-                  : "Cadastrar produto"}
-            </button>
-
-            {editando !== null && (
-              <button type="button" onClick={cancelarEdicao}>
-                Cancelar
+            <div className="produto-botoes">
+              <button type="submit" disabled={salvando}>
+                {salvando
+                  ? "Salvando..."
+                  : editando !== null
+                    ? "Salvar alterações"
+                    : "Cadastrar produto"}
               </button>
-            )}
+
+              {editando !== null && (
+                <button
+                  type="button"
+                  className="produto-btn-cancelar"
+                  onClick={cancelarEdicao}
+                >
+                  Cancelar
+                </button>
+              )}
+            </div>
           </form>
         </section>
 
-        <section>
+        <section className="produto-lista">
           <h3>Produtos cadastrados ({produtos.length})</h3>
 
           {carregando ? (
@@ -251,48 +301,82 @@ function Produtos() {
           ) : produtos.length === 0 ? (
             <p>Nenhum produto encontrado.</p>
           ) : (
-            <table border="1" cellPadding="8">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Produto</th>
-                  <th>Categoria</th>
-                  <th>Preço</th>
-                  <th>Disponibilidade</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
+            <div className="produto-tabela-container">
+              <table className="produto-tabela">
+                <thead>
+                  <tr>
+                    <th>Imagem</th>
+                    <th>Produto</th>
+                    <th>Categoria</th>
+                    <th>Preço</th>
+                    <th>Disponibilidade</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
 
-              <tbody>
-                {produtos.map((produto) => {
-                  const categoria = categorias.find(
-                    (item) => Number(item.id) === Number(produto.categoria_id)
-                  );
+                <tbody>
+                  {produtos.map((produto) => {
+                    const categoria = categorias.find(
+                      (item) =>
+                        Number(item.id) === Number(produto.categoria_id)
+                    );
 
-                  return (
-                    <tr key={produto.id}>
-                      <td>{produto.id}</td>
-                      <td>{produto.nome}</td>
-                      <td>{categoria?.nome || "Sem categoria"}</td>
-                      <td>
-                        R$ {Number(produto.preco).toFixed(2).replace(".", ",")}
-                      </td>
-                      <td>
-                        {produto.disponivel ? "Disponível" : "Indisponível"}
-                      </td>
-                      <td>
-                        <button onClick={() => prepararEdicao(produto)}>
-                          Editar
-                        </button>
-                        <button onClick={() => excluirProduto(produto.id)}>
-                          Excluir
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
+                    return (
+                      <tr key={produto.id}>
+                        <td>
+                          {produto.imagem ? (
+                            <img
+                              className="produto-miniatura"
+                              src={produto.imagem}
+                              alt={produto.nome}
+                            />
+                          ) : (
+                            <span>🍔</span>
+                          )}
+                        </td>
+
+                        <td>{produto.nome}</td>
+                        <td>{categoria?.nome || "Sem categoria"}</td>
+
+                        <td>
+                          R$ {Number(produto.preco).toFixed(2).replace(".", ",")}
+                        </td>
+
+                        <td>
+                          <span
+                            className={
+                              produto.disponivel
+                                ? "produto-status disponivel"
+                                : "produto-status indisponivel"
+                            }
+                          >
+                            {produto.disponivel
+                              ? "Disponível"
+                              : "Indisponível"}
+                          </span>
+                        </td>
+
+                        <td>
+                          <button
+                            className="produto-btn-editar"
+                            onClick={() => prepararEdicao(produto)}
+                          >
+                            Editar
+                          </button>
+
+                          <button
+                            className="produto-btn-excluir"
+                            onClick={() => excluirProduto(produto.id)}
+                          >
+                            Excluir
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
           )}
         </section>
       </main>

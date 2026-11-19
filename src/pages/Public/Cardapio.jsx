@@ -2,6 +2,30 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 
+function ImagemProduto({ imagem, nome }) {
+  const [erroImagem, setErroImagem] = useState(false);
+
+  if (!imagem || erroImagem) {
+    return (
+      <div className="cardapio-imagem-vazia">
+        <span>Imagem indisponível</span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="cardapio-imagem-container">
+      <img
+        src={imagem}
+        alt={nome}
+        className="cardapio-imagem"
+        loading="lazy"
+        onError={() => setErroImagem(true)}
+      />
+    </div>
+  );
+}
+
 function Cardapio() {
   const [categorias, setCategorias] = useState([]);
   const [produtos, setProdutos] = useState([]);
@@ -48,7 +72,7 @@ function Cardapio() {
   }
 
   return (
-    <>
+    <div className="pagina-cardapio">
       <header>
         <h1>Restaurante RANGO DOS GURI</h1>
 
@@ -60,7 +84,7 @@ function Cardapio() {
         </nav>
       </header>
 
-      <main>
+      <main className="cardapio-conteudo">
         <h2>Nosso Cardápio</h2>
 
         {categorias.map((categoria) => {
@@ -70,40 +94,49 @@ function Cardapio() {
           );
 
           return (
-            <section key={categoria.id}>
+            <section
+              key={categoria.id}
+              className="cardapio-categoria"
+            >
               <h3>{categoria.nome}</h3>
 
               {produtosDaCategoria.length === 0 ? (
                 <p>Nenhum produto disponível nesta categoria.</p>
               ) : (
-                produtosDaCategoria.map((produto) => (
-                  <article key={produto.id}>
-                    {produto.imagem && (
-                      <img
-                        src={produto.imagem}
-                        alt={produto.nome}
-                        width="180"
+                <div className="cardapio-grade">
+                  {produtosDaCategoria.map((produto) => (
+                    <article
+                      key={produto.id}
+                      className="cardapio-produto"
+                    >
+                      <ImagemProduto
+                        imagem={produto.imagem}
+                        nome={produto.nome}
                       />
-                    )}
 
-                    <h4>{produto.nome}</h4>
+                      <div className="cardapio-produto-info">
+                        <h4>{produto.nome}</h4>
 
-                    <p>{produto.descricao}</p>
+                        <p className="cardapio-descricao">
+                          {produto.descricao}
+                        </p>
 
-                    <p>
-                      R${" "}
-                      {Number(produto.preco)
-                        .toFixed(2)
-                        .replace(".", ",")}
-                    </p>
+                        <p className="cardapio-preco">
+                          R${" "}
+                          {Number(produto.preco)
+                            .toFixed(2)
+                            .replace(".", ",")}
+                        </p>
 
-                    <a href={`/produto?id=${produto.id}`}>
-                      <button type="button">
-                        Ver detalhes
-                      </button>
-                    </a>
-                  </article>
-                ))
+                        <a href={`/produto?id=${produto.id}`}>
+                          <button type="button">
+                            Ver detalhes
+                          </button>
+                        </a>
+                      </div>
+                    </article>
+                  ))}
+                </div>
               )}
             </section>
           );
@@ -113,7 +146,7 @@ function Cardapio() {
       <footer>
         <p>&copy; 2026 Restaurante RANGO DOS GURI</p>
       </footer>
-    </>
+    </div>
   );
 }
 

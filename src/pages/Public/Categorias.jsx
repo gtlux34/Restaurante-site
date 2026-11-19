@@ -1,4 +1,24 @@
+
+import { useEffect, useState } from "react";
+import { supabase } from "../../supabase";
+
 function Categorias() {
+  const [usuarioLogado, setUsuarioLogado] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUsuarioLogado(!!data.session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUsuarioLogado(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   return (
     <>
       <header>
@@ -9,7 +29,8 @@ function Categorias() {
           <a href="/cardapio">Cardápio</a>
           <a href="/categorias">Categorias</a>
           <a href="/contato">Contato</a>
-          <a href="/login">Entrar</a>
+
+          {!usuarioLogado && <a href="/login">Entrar</a>}
         </nav>
       </header>
 

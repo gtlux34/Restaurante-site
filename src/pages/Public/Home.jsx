@@ -6,6 +6,7 @@ function Home() {
   const [produtos, setProdutos] = useState([]);
   const [categorias, setCategorias] = useState([]);
   const [carregando, setCarregando] = useState(true);
+  const [usuarioLogado, setUsuarioLogado] = useState(false);
 
   useEffect(() => {
     async function carregarDados() {
@@ -38,6 +39,21 @@ function Home() {
     carregarDados();
   }, []);
 
+  // Verifica se existe um usuário logado
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUsuarioLogado(!!data.session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUsuarioLogado(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
   function formatarPreco(preco) {
     return Number(preco).toLocaleString("pt-BR", {
       style: "currency",
@@ -58,7 +74,16 @@ function Home() {
           <a href="/cardapio">Cardápio</a>
           <a href="/categorias">Categorias</a>
           <a href="/contato">Contato</a>
-          <a href="/login" className="home-login">Entrar</a>
+
+          {usuarioLogado ? (
+            <a href="/minha-conta" className="home-login">
+              Minha Conta
+            </a>
+          ) : (
+            <a href="/login" className="home-login">
+              Entrar
+            </a>
+          )}
         </nav>
       </header>
 

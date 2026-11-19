@@ -26,16 +26,28 @@ function Login() {
       return;
     }
 
-    // Verifica se o usuário é administrador
-    if (data.user?.app_metadata?.role !== "admin") {
+    // Verifica se é administrador
+    if (data.user?.app_metadata?.role === "admin") {
+      window.location.href = "/admin";
+      return;
+    }
+
+    // Verifica se é cliente
+    const { data: usuario, error: erroUsuario } = await supabase
+      .from("usuarios")
+      .select("tipo")
+      .eq("id", data.user.id)
+      .maybeSingle();
+
+    if (erroUsuario || usuario?.tipo !== "cliente") {
       await supabase.auth.signOut();
-      setErro("Você não tem permissão para acessar o painel administrativo.");
+      setErro("Não foi possível identificar seu cadastro. Entre em contato com o restaurante.");
       setCarregando(false);
       return;
     }
 
-    // Acesso autorizado
-    window.location.href = "/admin";
+    // Cliente autorizado
+    window.location.href = "/";
   }
 
   return (
@@ -56,14 +68,14 @@ function Login() {
         <section id="inicio" className="inicio">
           <div className="apresentacao">
             <span>RANGO DOS GURI</span>
-            <h2>Acesso ao sistema</h2>
-            <p>Entre na sua conta para acessar o restaurante.</p>
+            <h2>Bem-vindo!</h2>
+            <p>Entre na sua conta para aproveitar nosso restaurante.</p>
           </div>
 
           <div id="autenticacao" className="autenticacao">
             <div className="autenticacao-cabecalho">
               <h2>Entrar</h2>
-              <p>Acesse sua conta de administrador</p>
+              <p>Acesse sua conta de cliente ou administrador.</p>
             </div>
 
             <form onSubmit={fazerLogin}>
@@ -97,6 +109,11 @@ function Login() {
                 {carregando ? "Entrando..." : "Entrar"}
               </button>
             </form>
+
+            <p>
+              Ainda não tem uma conta?{" "}
+              <a href="/cadastro">Cadastre-se</a>
+            </p>
           </div>
         </section>
       </main>

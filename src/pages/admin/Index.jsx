@@ -140,6 +140,7 @@ function Admin() {
         <a href="/admin/pedidos">Pedidos</a>
         <a href="/admin/clientes">Clientes</a>
         <a href="/admin/mensagens">Mensagens</a>
+        <a href="/admin/minha-conta">Minha Conta</a>
         <a href="/login">Sair</a>
       </nav>
 
@@ -272,6 +273,12 @@ function Admin() {
             <h3>Mensagens</h3>
             <p>Visualize as mensagens recebidas pelo formulário de contato.</p>
             <a href="/admin/mensagens">Ver mensagens</a>
+          </article>
+
+          <article>
+            <h3>Minha Conta</h3>
+            <p>Visualize seu Gmail e altere sua senha de administrador.</p>
+            <a href="/admin/minha-conta">Acessar minha conta</a>
           </article>
         </section>
       </main>
