@@ -168,7 +168,6 @@ function Home() {
                   className="home-categoria-card"
                   key={categoria.id}
                 >
-                  <span>🍽️</span>
                   <h3>{categoria.nome}</h3>
                   <strong>CONFERIR →</strong>
                 </a>

@@ -824,3 +824,91 @@ main > section article a:hover {
   color: var(--preto);
   transition: color 0.2s ease;
 }
+
+/* ==========================================
+   NOVO BANNER PRINCIPAL
+   RANGO DOS GURI
+========================================== */
+
+.home-hero {
+  min-height: 530px;
+  padding: 55px;
+  grid-template-columns: 1.1fr 0.9fr;
+  position: relative;
+  isolation: isolate;
+  background: linear-gradient(120deg, #ffd700 0%, #ffd700 65%, #ffcf00 100%);
+}
+
+/* Destaque vermelho atrás do mascote */
+.home-hero::before {
+  content: "";
+  position: absolute;
+  width: 540px;
+  height: 540px;
+  right: -65px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--vermelho);
+  border: 7px solid var(--preto);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* Área do mascote */
+.home-hero-mascote {
+  position: relative;
+  z-index: 2;
+  min-height: 420px;
+}
+
+.home-hero-mascote img {
+  width: 100%;
+  max-width: 460px;
+  max-height: 460px;
+  object-fit: contain;
+  filter: drop-shadow(7px 9px 0 rgba(0, 0, 0, 0.22));
+  animation: mascoteFlutuar 3s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.home-hero-mascote img:hover {
+  transform: scale(1.06) rotate(-3deg);
+}
+
+/* Mais destaque para o texto */
+.home-hero h1 {
+  font-size: clamp(44px, 5vw, 70px);
+  text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.25);
+}
+
+.home-etiqueta {
+  transform: rotate(-2deg);
+}
+
+/* Celulares */
+@media (max-width: 600px) {
+  .home-hero {
+    grid-template-columns: 1fr;
+    padding: 30px 20px;
+    overflow: hidden;
+  }
+
+  .home-hero::before {
+    width: 310px;
+    height: 310px;
+    right: 50%;
+    top: auto;
+    bottom: -35px;
+    transform: translateX(50%);
+  }
+
+  .home-hero-mascote {
+    min-height: 300px;
+    margin-top: 15px;
+  }
+
+  .home-hero-mascote img {
+    max-width: 290px;
+    max-height: 290px;
+  }
+}
