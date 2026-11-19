@@ -112,7 +112,7 @@ function Login() {
           <h2>Cardápio</h2>
 
           <a href="/cardapio">
-            Ver cardápio
+            Ver Cardápio
           </a>
         </section>
 
