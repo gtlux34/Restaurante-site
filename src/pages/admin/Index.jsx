@@ -31,6 +31,19 @@ function Admin() {
     setCarregando(false);
   }
 
+  // Encerra a sessão do administrador
+  async function sairConta() {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      alert("Não foi possível sair da conta.");
+      console.error(error);
+      return;
+    }
+
+    window.location.replace("/");
+  }
+
   function normalizarStatus(status) {
     return (status || "").toLowerCase().trim();
   }
@@ -141,7 +154,16 @@ function Admin() {
         <a href="/admin/clientes">Clientes</a>
         <a href="/admin/mensagens">Mensagens</a>
         <a href="/admin/minha-conta">Minha Conta</a>
-        <a href="/login">Sair</a>
+
+        <a
+          href="#"
+          onClick={(event) => {
+            event.preventDefault();
+            sairConta();
+          }}
+        >
+          Sair
+        </a>
       </nav>
 
       <main>
