@@ -1,4 +1,52 @@
+
+import { useEffect, useState } from "react";
+import { supabase } from "../../supabase";
+
 function Cardapio() {
+  const [categorias, setCategorias] = useState([]);
+  const [produtos, setProdutos] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
+
+  useEffect(() => {
+    async function carregarCardapio() {
+      setCarregando(true);
+      setErro("");
+
+      const { data: categoriasData, error: categoriasError } =
+        await supabase
+          .from("categorias")
+          .select("*")
+          .order("id");
+
+      const { data: produtosData, error: produtosError } =
+        await supabase
+          .from("produtos")
+          .select("*")
+          .eq("disponivel", true)
+          .order("id");
+
+      if (categoriasError || produtosError) {
+        setErro(categoriasError?.message || produtosError?.message);
+      } else {
+        setCategorias(categoriasData || []);
+        setProdutos(produtosData || []);
+      }
+
+      setCarregando(false);
+    }
+
+    carregarCardapio();
+  }, []);
+
+  if (carregando) {
+    return <p>Carregando cardápio...</p>;
+  }
+
+  if (erro) {
+    return <p>Erro ao carregar cardápio: {erro}</p>;
+  }
+
   return (
     <>
       <header>
@@ -9,52 +57,57 @@ function Cardapio() {
           <a href="/cardapio">Cardápio</a>
           <a href="/categorias">Categorias</a>
           <a href="/contato">Contato</a>
-          <a href="/login">Entrar</a>
         </nav>
       </header>
 
       <main>
         <h2>Nosso Cardápio</h2>
 
-        <section>
-          <h3>Hambúrgueres</h3>
+        {categorias.map((categoria) => {
+          const produtosDaCategoria = produtos.filter(
+            (produto) =>
+              Number(produto.categoria_id) === Number(categoria.id)
+          );
 
-          <article>
-            <h4>Rango Burger</h4>
-            <p>Hambúrguer artesanal, queijo, alface, tomate e molho especial.</p>
-            <p>R$ 29,90</p>
-            <a href="/produto">Ver detalhes</a>
-          </article>
+          return (
+            <section key={categoria.id}>
+              <h3>{categoria.nome}</h3>
 
-          <article>
-            <h4>Guri Bacon</h4>
-            <p>Hambúrguer artesanal, queijo, bacon crocante e molho da casa.</p>
-            <p>R$ 34,90</p>
-            <a href="/produto">Ver detalhes</a>
-          </article>
-        </section>
+              {produtosDaCategoria.length === 0 ? (
+                <p>Nenhum produto disponível nesta categoria.</p>
+              ) : (
+                produtosDaCategoria.map((produto) => (
+                  <article key={produto.id}>
+                    {produto.imagem && (
+                      <img
+                        src={produto.imagem}
+                        alt={produto.nome}
+                        width="180"
+                      />
+                    )}
 
-        <section>
-          <h3>Bebidas</h3>
+                    <h4>{produto.nome}</h4>
 
-          <article>
-            <h4>Refrigerante</h4>
-            <p>Refrigerante lata 350ml.</p>
-            <p>R$ 6,00</p>
-            <a href="/produto">Ver detalhes</a>
-          </article>
-        </section>
+                    <p>{produto.descricao}</p>
 
-        <section>
-          <h3>Sobremesas</h3>
+                    <p>
+                      R${" "}
+                      {Number(produto.preco)
+                        .toFixed(2)
+                        .replace(".", ",")}
+                    </p>
 
-          <article>
-            <h4>Brownie</h4>
-            <p>Brownie de chocolate com cobertura especial.</p>
-            <p>R$ 12,00</p>
-            <a href="/produto">Ver detalhes</a>
-          </article>
-        </section>
+                    <a href={`/produto?id=${produto.id}`}>
+                      <button type="button">
+                        Ver detalhes
+                      </button>
+                    </a>
+                  </article>
+                ))
+              )}
+            </section>
+          );
+        })}
       </main>
 
       <footer>

@@ -1,9 +1,12 @@
+
 import Home from "./pages/Public/Home";
 import Cardapio from "./pages/Public/Cardapio";
 import Categorias from "./pages/Public/Categorias";
 import Contato from "./pages/Public/Contato";
 import Produto from "./pages/Public/Produto";
 import Login from "./pages/Public/Login";
+import Carrinho from "./pages/Public/Carrinho";
+import FinalizarPedido from "./pages/Public/FinalizarPedido";
 
 import Admin from "./pages/admin/Index";
 import CategoriasAdmin from "./pages/admin/Categorias";
@@ -15,53 +18,21 @@ import Produtos from "./pages/admin/Produtos";
 function App() {
   const pagina = window.location.pathname;
 
-  if (pagina === "/") {
-    return <Home />;
-  }
+  if (pagina === "/") return <Home />;
+  if (pagina === "/cardapio") return <Cardapio />;
+  if (pagina === "/categorias") return <Categorias />;
+  if (pagina === "/contato") return <Contato />;
+  if (pagina === "/produto") return <Produto />;
+  if (pagina === "/login") return <Login />;
+  if (pagina === "/carrinho") return <Carrinho />;
+  if (pagina === "/finalizar-pedido") return <FinalizarPedido />;
 
-  if (pagina === "/cardapio") {
-    return <Cardapio />;
-  }
-
-  if (pagina === "/categorias") {
-    return <Categorias />;
-  }
-
-  if (pagina === "/contato") {
-    return <Contato />;
-  }
-
-  if (pagina === "/produto") {
-    return <Produto />;
-  }
-
-  if (pagina === "/login") {
-  return <Login />;
-}
-
-  if (pagina === "/admin") {
-    return <Admin />;
-  }
-
-  if (pagina === "/admin/categorias") {
-    return <CategoriasAdmin />;
-  }
-
-  if (pagina === "/admin/clientes") {
-    return <Clientes />;
-  }
-
-  if (pagina === "/admin/mensagens") {
-    return <Mensagens />;
-  }
-
-  if (pagina === "/admin/pedidos") {
-    return <Pedidos />;
-  }
-
-  if (pagina === "/admin/produtos") {
-    return <Produtos />;
-  }
+  if (pagina === "/admin") return <Admin />;
+  if (pagina === "/admin/categorias") return <CategoriasAdmin />;
+  if (pagina === "/admin/clientes") return <Clientes />;
+  if (pagina === "/admin/mensagens") return <Mensagens />;
+  if (pagina === "/admin/pedidos") return <Pedidos />;
+  if (pagina === "/admin/produtos") return <Produtos />;
 
   return <h1>Página não encontrada</h1>;
 }
