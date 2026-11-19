@@ -1,6 +1,43 @@
+
+import { useState } from "react";
+import { supabase } from "../../supabase";
 import "./Login.css";
 
 function Login() {
+  const [email, setEmail] = useState("");
+  const [senha, setSenha] = useState("");
+  const [erro, setErro] = useState("");
+  const [carregando, setCarregando] = useState(false);
+
+  async function fazerLogin(e) {
+    e.preventDefault();
+
+    setErro("");
+    setCarregando(true);
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password: senha,
+    });
+
+    if (error) {
+      setErro("E-mail ou senha incorretos.");
+      setCarregando(false);
+      return;
+    }
+
+    // Verifica se o usuário é administrador
+    if (data.user?.app_metadata?.role !== "admin") {
+      await supabase.auth.signOut();
+      setErro("Você não tem permissão para acessar o painel administrativo.");
+      setCarregando(false);
+      return;
+    }
+
+    // Acesso autorizado
+    window.location.href = "/admin";
+  }
+
   return (
     <div className="login-page">
       <header>
@@ -13,41 +50,30 @@ function Login() {
             <li><a href="/contato">Contato</a></li>
           </ul>
         </nav>
-
-        <a href="#autenticacao" className="botao-entrar">
-          Entrar
-        </a>
       </header>
 
       <main>
         <section id="inicio" className="inicio">
-
           <div className="apresentacao">
             <span>RANGO DOS GURI</span>
-
             <h2>Acesso ao sistema</h2>
-
-            <p>
-              Entre na sua conta para acessar o restaurante.
-            </p>
+            <p>Entre na sua conta para acessar o restaurante.</p>
           </div>
 
           <div id="autenticacao" className="autenticacao">
-
             <div className="autenticacao-cabecalho">
               <h2>Entrar</h2>
-              <p>Acesse sua conta</p>
+              <p>Acesse sua conta de administrador</p>
             </div>
 
-            <form>
-
+            <form onSubmit={fazerLogin}>
               <div className="campo">
                 <label htmlFor="email">E-mail</label>
-
                 <input
                   type="email"
                   id="email"
-                  name="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   placeholder="Digite seu e-mail"
                   required
                 />
@@ -55,67 +81,23 @@ function Login() {
 
               <div className="campo">
                 <label htmlFor="senha">Senha</label>
-
                 <input
                   type="password"
                   id="senha"
-                  name="senha"
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
                   placeholder="Digite sua senha"
                   required
                 />
               </div>
 
-              <div className="opcoes-login">
-                <label>
-                  <input type="checkbox" name="lembrar" />
-                  Lembrar-me
-                </label>
+              {erro && <p style={{ color: "red" }}>{erro}</p>}
 
-                <a href="#">Esqueci minha senha</a>
-              </div>
-
-              <button type="submit">
-                Entrar
+              <button type="submit" disabled={carregando}>
+                {carregando ? "Entrando..." : "Entrar"}
               </button>
-
             </form>
-
-            <div className="cadastro">
-              <p>Não possui uma conta?</p>
-
-              <a href="#">
-                Criar conta
-              </a>
-            </div>
-
           </div>
-
-        </section>
-
-        <section id="cardapio" className="cardapio">
-          <a href="/cardapio">
-            Cardápio
-          </a>
-        </section>
-
-        <section id="contato" className="contato">
-
-          <div className="contato-conteudo">
-            <span>CONTATO</span>
-
-            <h2>Contato</h2>
-
-            <div className="contato-info">
-
-              <div>
-                <strong>Telefone</strong>
-                <p>(00) 00000-0000</p>
-              </div>
-
-            </div>
-
-          </div>
-
         </section>
       </main>
     </div>

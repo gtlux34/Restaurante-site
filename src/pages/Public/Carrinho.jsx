@@ -39,6 +39,7 @@ function Carrinho() {
     <>
       <header>
         <h1>RANGO DOS GURI</h1>
+
         <nav>
           <a href="/">Início</a>
           <a href="/cardapio">Cardápio</a>
@@ -90,7 +91,12 @@ function Carrinho() {
               Total: R$ {total.toFixed(2).replace(".", ",")}
             </h2>
 
-            <button onClick={() => alert("Vamos configurar a finalização na próxima etapa!")}>
+            <button
+              type="button"
+              onClick={() => {
+                window.location.href = "/finalizar-pedido";
+              }}
+            >
               Finalizar pedido
             </button>
           </>

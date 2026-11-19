@@ -91,3 +91,265 @@ img {
   outline: 3px solid var(--laranja);
   outline-offset: 3px;
 }
+
+/* ==========================================
+   DASHBOARD ADMINISTRATIVO
+   RANGO DOS GURI
+========================================== */
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+  margin: 25px 0;
+}
+
+.dashboard-cards article {
+  background: var(--branco);
+  border: var(--contorno);
+  border-radius: var(--raio);
+  padding: 24px;
+  box-shadow: var(--sombra-dura);
+  transition: 0.2s ease;
+}
+
+.dashboard-cards article:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: var(--sombra-dura-hover);
+}
+
+.dashboard-cards h3 {
+  font-family: var(--fonte-texto);
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 12px;
+  color: var(--cinza-texto);
+}
+
+.dashboard-cards p {
+  font-family: var(--fonte-titulo);
+  font-size: 30px;
+  color: var(--vermelho);
+}
+
+/* Seções do painel */
+
+main > section {
+  margin: 35px 0;
+}
+
+main > section > h2 {
+  font-size: 27px;
+  margin-bottom: 20px;
+  border-bottom: 4px solid var(--vermelho);
+  display: inline-block;
+  padding-bottom: 7px;
+}
+
+/* Pedidos recentes */
+
+main > section article {
+  background: var(--branco);
+  border: var(--contorno);
+  border-radius: var(--raio);
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: var(--sombra-dura);
+}
+
+main > section article h3 {
+  color: var(--vermelho);
+  margin-bottom: 10px;
+}
+
+main > section article p {
+  margin: 5px 0;
+}
+
+/* Botões */
+
+main button {
+  background: var(--amarelo);
+  color: var(--preto);
+  border: var(--contorno);
+  border-radius: 10px;
+  padding: 12px 20px;
+  font-family: var(--fonte-texto);
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 3px 3px 0 var(--preto);
+  transition: 0.2s ease;
+}
+
+main button:hover {
+  background: var(--laranja);
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0 var(--preto);
+}
+
+/* Links das seções */
+
+main > section article a {
+  display: inline-block;
+  margin-top: 10px;
+  background: var(--vermelho);
+  color: var(--branco);
+  padding: 9px 15px;
+  border-radius: 8px;
+  border: 2px solid var(--preto);
+  text-decoration: none;
+  font-weight: 800;
+}
+
+main > section article a:hover {
+  background: var(--vermelho-escuro);
+}
+
+/* Responsividade */
+
+@media (max-width: 900px) {
+  .dashboard-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 550px) {
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboard-cards article {
+    padding: 18px;
+  }
+
+  .dashboard-cards p {
+    font-size: 25px;
+  }
+}
+
+/* ==========================================
+   GRÁFICO DE VENDAS
+========================================== */
+
+.grafico-vendas {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 12px;
+  background: var(--branco);
+  border: var(--contorno);
+  border-radius: var(--raio);
+  padding: 25px 15px;
+  box-shadow: var(--sombra-dura);
+  min-height: 280px;
+}
+
+.grafico-coluna {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 0;
+}
+
+.grafico-coluna strong {
+  font-size: 12px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+.grafico-barra-area {
+  width: 100%;
+  height: 160px;
+  display: flex;
+  align-items: flex-end;
+  background: var(--bege);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.grafico-barra {
+  width: 100%;
+  min-height: 0;
+  background: var(--vermelho);
+  border: 2px solid var(--preto);
+  border-radius: 7px 7px 0 0;
+  transition: height 0.4s ease;
+}
+
+.grafico-coluna span {
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: capitalize;
+}
+
+@media (max-width: 600px) {
+  .grafico-vendas {
+    gap: 5px;
+    padding: 15px 8px;
+  }
+
+  .grafico-coluna strong {
+    font-size: 9px;
+  }
+
+  .grafico-coluna span {
+    font-size: 10px;
+  }
+
+  .grafico-barra-area {
+    height: 120px;
+  }
+}
+
+/* ==========================================
+   ETIQUETAS DE STATUS DOS PEDIDOS
+========================================== */
+
+.status-linha {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.status-pedido {
+  display: inline-block;
+  padding: 5px 13px;
+  border: 2px solid var(--preto);
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.status-pendente {
+  background: #fff0b3;
+  color: #805500;
+}
+
+.status-preparo {
+  background: #cce5ff;
+  color: #084b83;
+}
+
+.status-entrega {
+  background: #ead5ff;
+  color: #6420a0;
+}
+
+.status-entregue {
+  background: #c9f2d3;
+  color: #17652c;
+}
+
+.status-cancelado {
+  background: #ffd0d0;
+  color: #a00000;
+}
+
+.status-padrao {
+  background: #e5e5e5;
+  color: #333333;
+}
