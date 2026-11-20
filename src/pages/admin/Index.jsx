@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import { sairConta, formatarMoeda } from "../../utils";
 
 function Admin() {
   const [pedidos, setPedidos] = useState([]);
@@ -31,19 +32,6 @@ function Admin() {
     setCarregando(false);
   }
 
-  // Encerra a sessão do administrador
-  async function sairConta() {
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      alert("Não foi possível sair da conta.");
-      console.error(error);
-      return;
-    }
-
-    window.location.replace("/");
-  }
-
   function normalizarStatus(status) {
     return (status || "").toLowerCase().trim();
   }
@@ -64,13 +52,6 @@ function Admin() {
 
   function valorPedido(pedido) {
     return Number(pedido.valor_total ?? pedido.total ?? 0);
-  }
-
-  function formatarMoeda(valor) {
-    return Number(valor).toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    });
   }
 
   function formatarData(data) {

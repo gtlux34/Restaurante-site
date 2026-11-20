@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import { formatarMoeda } from "../../utils";
 
 function Pedidos() {
   const [pedidos, setPedidos] = useState([]);
@@ -134,13 +135,6 @@ function Pedidos() {
     return new Date(data).toLocaleString("pt-BR");
   }
 
-  function formatarValor(valor) {
-    return Number(valor || 0).toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    });
-  }
-
   function corStatus(status) {
     const valor = (status || "").toLowerCase();
 
@@ -210,7 +204,7 @@ function Pedidos() {
                     <td>{formatarData(pedido.created_at)}</td>
 
                     <td>
-                      {formatarValor(
+                      {formatarMoeda(
                         pedido.valor_total ?? pedido.total
                       )}
                     </td>
@@ -320,7 +314,7 @@ function Pedidos() {
                     <p>
                       {item.nome_produto} — {item.quantidade}x
                       {" — "}
-                      {formatarValor(item.subtotal)}
+                      {formatarMoeda(item.subtotal)}
                     </p>
                   </div>
                 ))
@@ -328,7 +322,7 @@ function Pedidos() {
 
               <h3>
                 Total:{" "}
-                {formatarValor(
+                {formatarMoeda(
                   pedido.valor_total ?? pedido.total
                 )}
               </h3>

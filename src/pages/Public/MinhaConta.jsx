@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import { formatarMoeda } from "../../utils";
 
 function MinhaConta() {
   const [carregando, setCarregando] = useState(true);
@@ -108,13 +109,6 @@ function MinhaConta() {
     return new Date(data).toLocaleDateString("pt-BR");
   }
 
-  function formatarValor(valor) {
-    return Number(valor || 0).toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    });
-  }
-
   if (carregando) {
     return <main><h2>Carregando sua conta...</h2></main>;
   }
@@ -212,7 +206,7 @@ function MinhaConta() {
                 <h4>Pedido #{pedido.id}</h4>
                 <p>Data: {formatarData(pedido.created_at)}</p>
                 <p>Status: {pedido.status}</p>
-                <p>Valor: {formatarValor(pedido.valor_total)}</p>
+                <p>Valor: {formatarMoeda(pedido.valor_total)}</p>
                 <p>Endereço: {pedido.endereco}</p>
               </article>
             ))

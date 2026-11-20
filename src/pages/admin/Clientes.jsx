@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import { sairConta } from "../../utils";
 
 function Clientes() {
   const [clientes, setClientes] = useState([]);
@@ -31,18 +32,6 @@ function Clientes() {
     }
 
     setCarregando(false);
-  }
-
-  async function sairConta() {
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      console.error(error);
-      alert("Não foi possível sair da conta.");
-      return;
-    }
-
-    window.location.replace("/");
   }
 
   return (

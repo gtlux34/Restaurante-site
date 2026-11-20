@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import { formatarMoeda } from "../../utils";
 
 function Home() {
   const [produtos, setProdutos] = useState([]);
@@ -53,13 +54,6 @@ function Home() {
 
     return () => subscription.unsubscribe();
   }, []);
-
-  function formatarPreco(preco) {
-    return Number(preco).toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-    });
-  }
 
   return (
     <div className="home-page">
@@ -161,7 +155,7 @@ function Home() {
                     </p>
 
                     <div className="home-produto-rodape">
-                      <strong>{formatarPreco(produto.preco)}</strong>
+                      <strong>{formatarMoeda(produto.preco)}</strong>
                       <a href={`/produto?id=${produto.id}`}>
                         Ver detalhes →
                       </a>

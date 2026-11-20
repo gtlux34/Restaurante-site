@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import { sairConta } from "../../utils";
 
 function CategoriasAdmin() {
   const [categorias, setCategorias] = useState([]);
@@ -130,18 +131,6 @@ function CategoriasAdmin() {
     } finally {
       setExcluindo(null);
     }
-  }
-
-  async function sairConta() {
-    const { error } = await supabase.auth.signOut();
-
-    if (error) {
-      console.error(error);
-      alert("Não foi possível sair da conta.");
-      return;
-    }
-
-    window.location.replace("/");
   }
 
   return (
