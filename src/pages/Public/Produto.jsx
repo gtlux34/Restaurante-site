@@ -1,6 +1,8 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import { formatarMoeda } from "../../utils";
+import "./Produto.css";
 
 function Produto() {
   const [produto, setProduto] = useState(null);
@@ -78,116 +80,197 @@ function Produto() {
           nome: produto.nome,
           preco: produto.preco,
           imagem: produto.imagem,
-          quantidade: quantidade,
+          quantidade,
         },
       ];
     }
 
     localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
-
     setMensagem("Produto adicionado ao carrinho com sucesso!");
   }
 
   if (carregando) {
-    return <main><p>Carregando produto...</p></main>;
+    return (
+      <div className="produto-carregando">
+        <div className="produto-spinner"></div>
+        <h2>CARREGANDO PRODUTO</h2>
+        <p>Estamos preparando tudo para você.</p>
+      </div>
+    );
   }
 
   if (erro || !produto) {
     return (
-      <main>
-        <h1>Produto não encontrado</h1>
+      <div className="produto-erro">
+        <h1>PRODUTO NÃO ENCONTRADO</h1>
         <p>{erro}</p>
-        <a href="/cardapio">Voltar ao cardápio</a>
-      </main>
+        <a href="/cardapio">VOLTAR AO CARDÁPIO</a>
+      </div>
     );
   }
 
   return (
-    <>
-      <header>
-        <h1>RANGO DOS GURI</h1>
+    <div className="produto-page">
+      <header className="produto-header">
+        <a href="/" className="produto-logo">
+          <span>RANGO</span>
+          <strong>DOS GURI</strong>
+        </a>
 
-        <nav>
+        <nav className="produto-nav">
           <a href="/">Início</a>
           <a href="/cardapio">Cardápio</a>
+          <a href="/categorias">Categorias</a>
           <a href="/contato">Contato</a>
-          <a href="/carrinho">Meu carrinho</a>
+          <a href="/minha-conta">Minha Conta</a>
         </nav>
       </header>
 
-      <main>
-        <a href="/cardapio">← Voltar ao cardápio</a>
+      <main className="produto-main">
+        <div className="produto-caminho">
+          <a href="/">INÍCIO</a>
+          <span>/</span>
+          <a href="/cardapio">CARDÁPIO</a>
+          <span>/</span>
+          <strong>{produto.nome}</strong>
+        </div>
 
-        <section>
-          {produto.imagem && (
-            <img
-              src={produto.imagem}
-              alt={produto.nome}
-              style={{
-                width: "100%",
-                maxWidth: "450px",
-                borderRadius: "12px",
-                objectFit: "cover",
-              }}
-            />
-          )}
+        <a href="/cardapio" className="produto-voltar">
+          ← VOLTAR AO CARDÁPIO
+        </a>
 
-          <h1>{produto.nome}</h1>
+        <section className="produto-detalhes">
+          <div className="produto-imagem-area">
+            {produto.imagem ? (
+              <img
+                src={produto.imagem}
+                alt={produto.nome}
+                className="produto-imagem"
+              />
+            ) : (
+              <div className="produto-imagem-vazia">
+                <span>RANGO DOS GURI</span>
+                <p>Imagem não disponível</p>
+              </div>
+            )}
 
-          {categoria && <p>Categoria: {categoria.nome}</p>}
+            <div className="produto-imagem-etiqueta">
+              FEITO COM SABOR
+            </div>
+          </div>
 
-          <p>{produto.descricao}</p>
+          <div className="produto-informacoes">
+            <span className="produto-etiqueta">
+              {categoria?.nome || "NOSSO CARDÁPIO"}
+            </span>
 
-          <h2>
-            R$ {Number(produto.preco).toFixed(2).replace(".", ",")}
-          </h2>
+            <h1>{produto.nome}</h1>
 
-          <p>
-            {produto.disponivel
-              ? "Produto disponível"
-              : "Produto indisponível no momento"}
-          </p>
+            <div className="produto-divisor"></div>
 
-          {produto.disponivel && (
-            <>
-              <label>
-                Quantidade:
-                <input
-                  type="number"
-                  min="1"
-                  value={quantidade}
-                  onChange={(event) =>
-                    setQuantidade(
-                      Math.max(1, Number(event.target.value) || 1)
-                    )
-                  }
-                />
-              </label>
+            <p className="produto-descricao">
+              {produto.descricao ||
+                "Uma delícia preparada especialmente para você."}
+            </p>
 
-              <p>
-                <button type="button" onClick={adicionarAoCarrinho}>
-                  Adicionar ao carrinho
+            <div className="produto-preco-area">
+              <span>PREÇO</span>
+              <strong>{formatarMoeda(produto.preco)}</strong>
+            </div>
+
+            <div
+              className={`produto-disponibilidade ${
+                produto.disponivel ? "disponivel" : "indisponivel"
+              }`}
+            >
+              <span className="produto-status-ponto"></span>
+              {produto.disponivel
+                ? "Disponível para pedido"
+                : "Indisponível no momento"}
+            </div>
+
+            {produto.disponivel && (
+              <>
+                <div className="produto-quantidade">
+                  <label htmlFor="quantidade">QUANTIDADE</label>
+
+                  <div className="produto-quantidade-controle">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setQuantidade((atual) => Math.max(1, atual - 1))
+                      }
+                    >
+                      −
+                    </button>
+
+                    <input
+                      id="quantidade"
+                      type="number"
+                      min="1"
+                      value={quantidade}
+                      onChange={(event) =>
+                        setQuantidade(
+                          Math.max(1, Number(event.target.value) || 1)
+                        )
+                      }
+                    />
+
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setQuantidade((atual) => atual + 1)
+                      }
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  className="produto-adicionar"
+                  onClick={adicionarAoCarrinho}
+                >
+                  ADICIONAR AO CARRINHO
+                  <span>→</span>
                 </button>
-              </p>
-            </>
-          )}
+              </>
+            )}
 
-          {mensagem && (
-            <p style={{ color: "green" }}>{mensagem}</p>
-          )}
+            {mensagem && (
+              <div className="produto-mensagem-sucesso">
+                {mensagem}
+                <a href="/carrinho">IR PARA O CARRINHO →</a>
+              </div>
+            )}
 
-          <p>
-            <a href="/carrinho">Ir para o carrinho</a>
-          </p>
+            <div className="produto-observacao">
+              <strong>RANGO DOS GURI</strong>
+              <p>Seu próximo pedido favorito começa aqui.</p>
+            </div>
+          </div>
+        </section>
 
-          <a href="/cardapio">Ver outros produtos</a>
+        <section className="produto-chamada">
+          <div>
+            <span>AINDA COM FOME?</span>
+            <h2>CONHEÇA MAIS DELÍCIAS!</h2>
+          </div>
+
+          <a href="/cardapio">EXPLORAR CARDÁPIO →</a>
         </section>
       </main>
 
-      <footer>
-        <p>© 2026 RANGO DOS GURI</p>
+      <footer className="produto-footer">
+        <a href="/" className="produto-logo">
+          <span>RANGO</span>
+          <strong>DOS GURI</strong>
+        </a>
+
+        <p>© 2026 RANGO DOS GURI. Todos os direitos reservados.</p>
       </footer>
-    </>
+    </div>
   );
 }
 

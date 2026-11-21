@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 import { formatarMoeda } from "../../utils";
+import "./MinhaConta.css";
 
 function MinhaConta() {
   const [carregando, setCarregando] = useState(true);
@@ -11,11 +12,9 @@ function MinhaConta() {
 
   const [usuario, setUsuario] = useState(null);
   const [email, setEmail] = useState("");
-
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [enderecoCasa, setEnderecoCasa] = useState("");
-
   const [pedidos, setPedidos] = useState([]);
 
   useEffect(() => {
@@ -109,121 +108,245 @@ function MinhaConta() {
     return new Date(data).toLocaleDateString("pt-BR");
   }
 
+  function classeStatus(status) {
+    const valor = (status || "").toLowerCase();
+
+    if (valor.includes("pendente")) return "conta-status pendente";
+    if (valor.includes("preparo")) return "conta-status preparo";
+    if (valor.includes("entrega")) return "conta-status entrega";
+    if (valor.includes("entregue")) return "conta-status entregue";
+    if (valor.includes("cancelado")) return "conta-status cancelado";
+
+    return "conta-status";
+  }
+
+  async function sairDaConta() {
+    await supabase.auth.signOut();
+    window.location.replace("/");
+  }
+
   if (carregando) {
-    return <main><h2>Carregando sua conta...</h2></main>;
+    return (
+      <div className="conta-carregando">
+        <div className="conta-spinner"></div>
+        <h2>CARREGANDO SUA CONTA...</h2>
+        <p>Estamos preparando tudo para você!</p>
+      </div>
+    );
   }
 
   return (
-    <>
-      <header>
-        <h1>RANGO DOS GURI</h1>
-        <nav>
+    <div className="conta-page">
+      <header className="home-header">
+        <a href="/" className="home-logo">
+          <span>RANGO</span>
+          <strong>DOS GURI</strong>
+        </a>
+
+        <nav className="home-nav">
           <a href="/">Início</a>
           <a href="/cardapio">Cardápio</a>
-          <a href="/carrinho">Carrinho</a>
-          <a href="/minha-conta">Minha Conta</a>
+          <a href="/categorias">Categorias</a>
+          <a href="/contato">Contato</a>
+          <a href="/minha-conta" className="home-login">
+            Minha Conta
+          </a>
         </nav>
       </header>
 
-      <main style={{ maxWidth: "800px", margin: "30px auto", padding: "20px" }}>
-        <h2>Minha Conta</h2>
-        <p>Gerencie seus dados pessoais e acompanhe seus pedidos.</p>
+      <main className="conta-main">
+        <section className="conta-banner">
+          <div className="conta-banner-texto">
+            <span className="conta-etiqueta">
+              ★ ÁREA DO CLIENTE
+            </span>
 
-        {erro && <p style={{ color: "red" }}>{erro}</p>}
-        {mensagem && <p style={{ color: "green" }}>{mensagem}</p>}
+            <h1>
+              SEJA BEM-VINDO
+              <br />
+              <span>{nome ? nome.split(" ")[0].toUpperCase() : "AO RANGO"}!</span>
+            </h1>
 
-        <section>
-          <h3>Meus dados</h3>
+            <p>
+              Aqui você acompanha seus pedidos e mantém seus dados
+              sempre atualizados.
+            </p>
 
-          <form onSubmit={salvarDados}>
-            <label>Nome completo</label>
-            <input
-              type="text"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
-              required
-            />
+            <div className="conta-banner-frase">
+              SUA CONTA. SEUS PEDIDOS. SEU RANGO!
+            </div>
+          </div>
 
-            <br /><br />
-
-            <label>E-mail cadastrado</label>
-            <input
-              type="email"
-              value={email}
-              readOnly
-            />
-
-            <br /><br />
-
-            <label>Telefone / WhatsApp</label>
-            <input
-              type="tel"
-              value={telefone}
-              onChange={(e) => setTelefone(e.target.value)}
-              required
-            />
-
-            <br /><br />
-
-            <h3>Meu endereço CASA</h3>
-
-            <label>Endereço salvo</label>
-            <textarea
-              value={enderecoCasa}
-              onChange={(e) => setEnderecoCasa(e.target.value)}
-              placeholder="Digite seu endereço completo"
-              rows="3"
-            />
-
-            <br /><br />
-
-            <button type="submit" disabled={salvando}>
-              {salvando ? "Salvando..." : "Salvar alterações"}
-            </button>
-          </form>
+          <div className="conta-banner-destaque">
+            <span>🍔</span>
+            <strong>RANGO</strong>
+            <small>DOS GURI</small>
+          </div>
         </section>
 
-        <hr />
+        {erro && (
+          <div className="conta-alerta erro">
+            {erro}
+          </div>
+        )}
 
-        <section>
-          <h3>Meus pedidos</h3>
+        {mensagem && (
+          <div className="conta-alerta sucesso">
+            {mensagem}
+          </div>
+        )}
 
-          <h2>Total de pedidos: {pedidos.length}</h2>
+        <section className="conta-secao">
+          <div className="conta-titulo-secao">
+            <div>
+              <span className="conta-subtitulo">SEUS DADOS</span>
+              <h2>MINHA CONTA</h2>
+            </div>
+            <span className="conta-icone-secao">👤</span>
+          </div>
+
+          <div className="conta-dados-card">
+            <div className="conta-card-topo">
+              <span>✦</span>
+              <h3>MEUS DADOS PESSOAIS</h3>
+            </div>
+
+            <form onSubmit={salvarDados} className="conta-formulario">
+              <div className="conta-campo">
+                <label>Nome completo</label>
+                <input
+                  type="text"
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                  placeholder="Seu nome completo"
+                  required
+                />
+              </div>
+
+              <div className="conta-campo">
+                <label>E-mail cadastrado</label>
+                <input
+                  type="email"
+                  value={email}
+                  readOnly
+                />
+                <small>O e-mail não pode ser alterado por aqui.</small>
+              </div>
+
+              <div className="conta-campo">
+                <label>Telefone / WhatsApp</label>
+                <input
+                  type="tel"
+                  value={telefone}
+                  onChange={(e) => setTelefone(e.target.value)}
+                  placeholder="Seu telefone"
+                  required
+                />
+              </div>
+
+              <div className="conta-campo campo-completo">
+                <label>Meu endereço CASA</label>
+                <textarea
+                  value={enderecoCasa}
+                  onChange={(e) => setEnderecoCasa(e.target.value)}
+                  placeholder="Digite seu endereço completo"
+                  rows="3"
+                />
+              </div>
+
+              <div className="conta-acoes campo-completo">
+                <button type="submit" disabled={salvando}>
+                  {salvando ? "SALVANDO..." : "SALVAR ALTERAÇÕES →"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section className="conta-secao">
+          <div className="conta-titulo-secao">
+            <div>
+              <span className="conta-subtitulo">ACOMPANHE SEUS RANGOS</span>
+              <h2>MEUS PEDIDOS</h2>
+            </div>
+            <span className="conta-icone-secao">🛍️</span>
+          </div>
+
+          <div className="conta-resumo-pedidos">
+            <div>
+              <span>TOTAL DE PEDIDOS</span>
+              <strong>{pedidos.length}</strong>
+            </div>
+            <p>Obrigado por escolher o Rango dos Guri!</p>
+          </div>
 
           {pedidos.length === 0 ? (
-            <p>Você ainda não realizou nenhum pedido.</p>
+            <div className="conta-sem-pedidos">
+              <span>🍔</span>
+              <h3>AINDA NÃO TEM RANGO POR AQUI!</h3>
+              <p>
+                Você ainda não realizou nenhum pedido.
+                Que tal conferir nosso cardápio?
+              </p>
+              <a href="/cardapio">VER CARDÁPIO →</a>
+            </div>
           ) : (
-            pedidos.map((pedido) => (
-              <article
-                key={pedido.id}
-                style={{
-                  border: "1px solid #ddd",
-                  padding: "15px",
-                  marginBottom: "15px",
-                  borderRadius: "8px",
-                }}
-              >
-                <h4>Pedido #{pedido.id}</h4>
-                <p>Data: {formatarData(pedido.created_at)}</p>
-                <p>Status: {pedido.status}</p>
-                <p>Valor: {formatarMoeda(pedido.valor_total)}</p>
-                <p>Endereço: {pedido.endereco}</p>
-              </article>
-            ))
+            <div className="conta-pedidos-grid">
+              {pedidos.map((pedido) => (
+                <article className="conta-pedido-card" key={pedido.id}>
+                  <div className="conta-pedido-topo">
+                    <div>
+                      <span>PEDIDO</span>
+                      <h3>#{pedido.id}</h3>
+                    </div>
+
+                    <span className={classeStatus(pedido.status)}>
+                      {pedido.status}
+                    </span>
+                  </div>
+
+                  <div className="conta-pedido-info">
+                    <p>
+                      <strong> Data:</strong>{" "}
+                      {formatarData(pedido.created_at)}
+                    </p>
+
+                    <p>
+                      <strong> Valor:</strong>{" "}
+                      {formatarMoeda(pedido.valor_total)}
+                    </p>
+
+                    <p>
+                      <strong>📍 Endereço:</strong>{" "}
+                      {pedido.endereco || "Não informado"}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
           )}
         </section>
 
-        <button
-          type="button"
-          onClick={async () => {
-            await supabase.auth.signOut();
-            window.location.replace("/");
-          }}
-        >
-          Sair da conta
-        </button>
+        <section className="conta-sair">
+          <div>
+            <h3>VAI SAIR AGORA?</h3>
+            <p>Você poderá entrar novamente quando quiser.</p>
+          </div>
+
+          <button type="button" onClick={sairDaConta}>
+            SAIR DA CONTA ↗
+          </button>
+        </section>
       </main>
-    </>
+
+      <footer className="home-footer">
+        <a href="/" className="home-logo">
+          <span>RANGO</span>
+          <strong>DOS GURI</strong>
+        </a>
+        <p>© 2026 RANGO DOS GURI. Todos os direitos reservados.</p>
+      </footer>
+    </div>
   );
 }
 

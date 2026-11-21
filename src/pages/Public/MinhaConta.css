@@ -1,0 +1,602 @@
+
+/* ==========================================
+   MINHA CONTA - RANGO DOS GURI
+   Identidade visual da página inicial
+========================================== */
+
+.conta-page {
+  min-height: 100vh;
+  color: var(--preto);
+}
+
+.conta-main {
+  width: min(1100px, 90%);
+  margin: auto;
+  padding-bottom: 35px;
+}
+
+/* Banner principal */
+
+.conta-banner {
+  margin: 35px 0 55px;
+  padding: 45px;
+  min-height: 330px;
+  display: grid;
+  grid-template-columns: 1.3fr 0.7fr;
+  align-items: center;
+  gap: 25px;
+  background: var(--amarelo);
+  border: 4px solid var(--preto);
+  border-radius: 25px;
+  box-shadow: 8px 8px 0 var(--preto);
+  overflow: hidden;
+  position: relative;
+}
+
+.conta-banner-texto {
+  position: relative;
+  z-index: 2;
+}
+
+.conta-etiqueta {
+  display: inline-block;
+  padding: 8px 16px;
+  margin-bottom: 20px;
+  color: var(--amarelo);
+  background: var(--preto);
+  border-radius: 30px;
+  font-size: 13px;
+  font-weight: 900;
+  transform: rotate(-2deg);
+}
+
+.conta-banner h1 {
+  font-size: clamp(38px, 5vw, 62px);
+  line-height: 1.05;
+}
+
+.conta-banner h1 span {
+  color: var(--vermelho);
+  overflow-wrap: anywhere;
+}
+
+.conta-banner-texto > p {
+  max-width: 520px;
+  margin: 18px 0;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.conta-banner-frase {
+  margin-top: 22px;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.conta-banner-destaque {
+  width: 245px;
+  height: 245px;
+  justify-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--vermelho);
+  border: 6px solid var(--preto);
+  border-radius: 50%;
+  box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.2);
+  transform: rotate(5deg);
+}
+
+.conta-banner-destaque span {
+  font-size: 85px;
+  line-height: 1.1;
+}
+
+.conta-banner-destaque strong {
+  color: var(--amarelo);
+  font-family: var(--fonte-titulo);
+  font-size: 35px;
+  line-height: 1;
+}
+
+.conta-banner-destaque small {
+  color: var(--branco);
+  font-family: var(--fonte-titulo);
+  font-size: 20px;
+}
+
+/* Alertas */
+
+.conta-alerta {
+  padding: 15px 20px;
+  margin: 20px 0;
+  border: 3px solid var(--preto);
+  border-radius: 12px;
+  font-weight: 800;
+  box-shadow: 4px 4px 0 var(--preto);
+}
+
+.conta-alerta.erro {
+  background: #ffd0d0;
+  color: #970000;
+}
+
+.conta-alerta.sucesso {
+  background: #d4f5d4;
+  color: #155d20;
+}
+
+/* Títulos das seções */
+
+.conta-secao {
+  margin: 55px 0;
+}
+
+.conta-titulo-secao {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 15px;
+  margin-bottom: 25px;
+}
+
+.conta-subtitulo {
+  color: var(--vermelho);
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+}
+
+.conta-titulo-secao h2 {
+  display: table;
+  padding-bottom: 8px;
+  border-bottom: 4px solid var(--vermelho);
+  font-size: 35px;
+}
+
+.conta-icone-secao {
+  font-size: 35px;
+}
+
+/* Cartão dos dados */
+
+.conta-dados-card {
+  padding: 30px;
+  background: var(--branco);
+  border: 3px solid var(--preto);
+  border-radius: 18px;
+  box-shadow: 6px 6px 0 var(--preto);
+}
+
+.conta-card-topo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 18px;
+  margin-bottom: 25px;
+  border-bottom: 2px dashed #c9b98e;
+}
+
+.conta-card-topo span {
+  color: var(--vermelho);
+  font-size: 28px;
+}
+
+.conta-card-topo h3 {
+  font-size: 23px;
+}
+
+.conta-formulario {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.conta-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.conta-campo label {
+  font-weight: 900;
+  font-size: 14px;
+}
+
+.conta-campo input,
+.conta-campo textarea {
+  width: 100%;
+  padding: 13px 15px;
+  border: 2px solid var(--preto);
+  border-radius: 9px;
+  background: #fffdf6;
+  color: var(--preto);
+  font-family: var(--fonte-texto);
+  font-size: 15px;
+  font-weight: 700;
+  outline: none;
+  transition: 0.2s;
+}
+
+.conta-campo input:focus,
+.conta-campo textarea:focus {
+  border-color: var(--vermelho);
+  box-shadow: 3px 3px 0 var(--amarelo);
+}
+
+.conta-campo input[readonly] {
+  background: #eee9dc;
+  color: #686052;
+  cursor: not-allowed;
+}
+
+.conta-campo textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.conta-campo small {
+  color: #756b5b;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.campo-completo {
+  grid-column: 1 / -1;
+}
+
+.conta-acoes {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.conta-acoes button,
+.conta-sair button {
+  padding: 14px 22px;
+  background: var(--vermelho);
+  color: var(--branco);
+  border: 3px solid var(--preto);
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--preto);
+  font-family: var(--fonte-texto);
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.conta-acoes button:hover,
+.conta-sair button:hover {
+  background: var(--vermelho-escuro);
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--preto);
+}
+
+.conta-acoes button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Resumo de pedidos */
+
+.conta-resumo-pedidos {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 22px 25px;
+  margin-bottom: 25px;
+  background: var(--amarelo);
+  border: 3px solid var(--preto);
+  border-radius: 15px;
+  box-shadow: 5px 5px 0 var(--preto);
+}
+
+.conta-resumo-pedidos div {
+  display: flex;
+  flex-direction: column;
+}
+
+.conta-resumo-pedidos div span {
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.conta-resumo-pedidos div strong {
+  color: var(--vermelho);
+  font-family: var(--fonte-titulo);
+  font-size: 40px;
+  line-height: 1.1;
+}
+
+.conta-resumo-pedidos p {
+  font-weight: 800;
+  text-align: right;
+}
+
+/* Sem pedidos */
+
+.conta-sem-pedidos {
+  padding: 40px 20px;
+  text-align: center;
+  background: var(--branco);
+  border: 3px dashed var(--preto);
+  border-radius: 18px;
+}
+
+.conta-sem-pedidos > span {
+  font-size: 55px;
+}
+
+.conta-sem-pedidos h3 {
+  margin: 15px 0;
+  font-size: 25px;
+}
+
+.conta-sem-pedidos p {
+  margin-bottom: 22px;
+  color: var(--cinza-texto);
+  font-weight: 700;
+}
+
+.conta-sem-pedidos a {
+  display: inline-block;
+  padding: 12px 20px;
+  background: var(--vermelho);
+  color: var(--branco);
+  border: 3px solid var(--preto);
+  border-radius: 10px;
+  box-shadow: 4px 4px 0 var(--preto);
+  text-decoration: none;
+  font-weight: 900;
+  transition: 0.2s;
+}
+
+.conta-sem-pedidos a:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--preto);
+}
+
+/* Cartões de pedidos */
+
+.conta-pedidos-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.conta-pedido-card {
+  padding: 22px;
+  background: var(--branco);
+  border: 3px solid var(--preto);
+  border-radius: 15px;
+  box-shadow: 5px 5px 0 var(--preto);
+  transition: 0.2s;
+}
+
+.conta-pedido-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 7px 7px 0 var(--preto);
+}
+
+.conta-pedido-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 15px;
+  margin-bottom: 15px;
+  border-bottom: 2px dashed #c9b98e;
+}
+
+.conta-pedido-topo div span {
+  color: var(--vermelho);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.conta-pedido-topo h3 {
+  font-size: 27px;
+}
+
+.conta-status {
+  display: inline-block;
+  padding: 6px 12px;
+  background: #e5e5e5;
+  border: 2px solid var(--preto);
+  border-radius: 30px;
+  font-size: 11px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.conta-status.pendente {
+  background: #fff0b3;
+  color: #805500;
+}
+
+.conta-status.preparo {
+  background: #cce5ff;
+  color: #084b83;
+}
+
+.conta-status.entrega {
+  background: #ead5ff;
+  color: #6420a0;
+}
+
+.conta-status.entregue {
+  background: #c9f2d3;
+  color: #17652c;
+}
+
+.conta-status.cancelado {
+  background: #ffd0d0;
+  color: #a00000;
+}
+
+.conta-pedido-info p {
+  margin: 9px 0;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+/* Sair da conta */
+
+.conta-sair {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  padding: 25px;
+  margin: 60px 0 30px;
+  background: var(--preto);
+  color: var(--branco);
+  border: 3px solid var(--preto);
+  border-radius: 16px;
+  box-shadow: 5px 5px 0 var(--vermelho);
+}
+
+.conta-sair h3 {
+  color: var(--amarelo);
+  font-size: 24px;
+}
+
+.conta-sair p {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+.conta-sair button {
+  flex-shrink: 0;
+  background: var(--amarelo);
+  color: var(--preto);
+}
+
+.conta-sair button:hover {
+  background: var(--laranja);
+}
+
+/* Carregamento */
+
+.conta-carregando {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.conta-carregando h2 {
+  font-size: 25px;
+}
+
+.conta-spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid #d8cba9;
+  border-top-color: var(--vermelho);
+  border-radius: 50%;
+  animation: contaGirar 0.8s linear infinite;
+}
+
+@keyframes contaGirar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsividade */
+
+@media (max-width: 800px) {
+  .conta-banner {
+    padding: 30px;
+    grid-template-columns: 1fr 0.6fr;
+  }
+
+  .conta-banner-destaque {
+    width: 190px;
+    height: 190px;
+  }
+
+  .conta-banner-destaque span {
+    font-size: 65px;
+  }
+
+  .conta-banner-destaque strong {
+    font-size: 28px;
+  }
+
+  .conta-pedidos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .conta-main {
+    width: 92%;
+  }
+
+  .conta-banner {
+    margin-top: 20px;
+    padding: 28px 20px;
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .conta-banner-texto > p {
+    font-size: 15px;
+  }
+
+  .conta-banner-destaque {
+    width: 190px;
+    height: 190px;
+    margin: 15px auto 0;
+  }
+
+  .conta-formulario {
+    grid-template-columns: 1fr;
+  }
+
+  .campo-completo {
+    grid-column: auto;
+  }
+
+  .conta-dados-card {
+    padding: 20px;
+  }
+
+  .conta-titulo-secao h2 {
+    font-size: 29px;
+  }
+
+  .conta-resumo-pedidos {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .conta-resumo-pedidos p {
+    text-align: left;
+  }
+
+  .conta-sair {
+    align-items: stretch;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .conta-sair button {
+    width: 100%;
+  }
+
+  .conta-pedido-topo {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
