@@ -259,52 +259,50 @@ function Home() {
         @media (max-width: 360px) {
           .home-page .home-categorias-grid {
             grid-template-columns: 1fr;
-        
           }
         }
 
-/* PADRONIZAÇÃO DOS CARDS DE PRODUTOS */
+        /* PADRONIZAÇÃO DOS CARDS DE PRODUTOS */
 
-.home-page .home-produtos-grid {
-  align-items: stretch;
-}
+        .home-page .home-produtos-grid {
+          align-items: stretch;
+        }
 
-.home-page .home-produto-card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
+        .home-page .home-produto-card {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
 
-.home-page .home-produto-imagem {
-  flex-shrink: 0;
-}
+        .home-page .home-produto-imagem {
+          flex-shrink: 0;
+        }
 
-.home-page .home-produto-info {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
+        .home-page .home-produto-info {
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+        }
 
-.home-page .home-produto-info h3 {
-  min-height: 26px;
-}
+        .home-page .home-produto-info h3 {
+          min-height: 26px;
+        }
 
-.home-page .home-produto-info > p {
-  min-height: 42px;
-  max-height: 42px;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
+        .home-page .home-produto-info > p {
+          min-height: 42px;
+          max-height: 42px;
+          overflow: hidden;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
 
-.home-page .home-produto-rodape {
-  margin-top: auto;
-  min-height: 42px;
-  flex-shrink: 0;
-  align-items: center;
-}
-
+        .home-page .home-produto-rodape {
+          margin-top: auto;
+          min-height: 42px;
+          flex-shrink: 0;
+          align-items: center;
+        }
       `}</style>
 
       <header className="home-header">
@@ -317,6 +315,7 @@ function Home() {
           <a href="/" className="ativo">Início</a>
           <a href="/cardapio">Cardápio</a>
           <a href="/categorias">Categorias</a>
+          <a href="/carrinho">Carrinho</a>
           <a href="/contato">Contato</a>
 
           {usuarioLogado ? (

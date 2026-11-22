@@ -1,15 +1,52 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { supabase } from "../../supabase";
 
 function Carrinho() {
-  const [itens, setItens] = useState(() => {
-    const salvos = localStorage.getItem("carrinho");
-    return salvos ? JSON.parse(salvos) : [];
-  });
+  const [itens, setItens] = useState([]);
+  const [chaveCarrinho, setChaveCarrinho] = useState(null);
+  const [carregando, setCarregando] = useState(true);
+
+  useEffect(() => {
+    function carregarCarrinho(user) {
+      const chave = user
+        ? `carrinho_${user.id}`
+        : "carrinho_visitante";
+
+      const salvos = localStorage.getItem(chave);
+
+      setChaveCarrinho(chave);
+      setItens(salvos ? JSON.parse(salvos) : []);
+      setCarregando(false);
+    }
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_evento, session) => {
+      carregarCarrinho(session?.user || null);
+    });
+
+    async function verificarUsuario() {
+      const { data: { user } } = await supabase.auth.getUser();
+      carregarCarrinho(user);
+    }
+
+    verificarUsuario();
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
 
   function salvarCarrinho(novosItens) {
     setItens(novosItens);
-    localStorage.setItem("carrinho", JSON.stringify(novosItens));
+
+    if (chaveCarrinho) {
+      localStorage.setItem(
+        chaveCarrinho,
+        JSON.stringify(novosItens)
+      );
+    }
   }
 
   function alterarQuantidade(id, quantidade) {
@@ -34,6 +71,10 @@ function Carrinho() {
     (soma, item) => soma + Number(item.preco) * item.quantidade,
     0
   );
+
+  if (carregando) {
+    return <p>Carregando carrinho...</p>;
+  }
 
   return (
     <>

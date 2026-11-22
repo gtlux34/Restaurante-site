@@ -129,6 +129,7 @@ function Admin() {
 
       <nav>
         <a href="/">Início</a>
+        <a href="/carrinho">Carrinho</a>
         <a href="/admin/produtos">Produtos</a>
         <a href="/admin/categorias">Categorias</a>
         <a href="/admin/pedidos">Pedidos</a>

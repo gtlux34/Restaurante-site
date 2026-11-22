@@ -13,13 +13,11 @@ function FinalizarPedido() {
   const [salvarComoCasa, setSalvarComoCasa] = useState(false);
 
   const [usuarioId, setUsuarioId] = useState(null);
+  const [chaveCarrinho, setChaveCarrinho] = useState(null);
   const [carregandoPerfil, setCarregandoPerfil] = useState(true);
 
   const [observacao, setObservacao] = useState("");
-
-  const [carrinho, setCarrinho] = useState(() => {
-    return JSON.parse(localStorage.getItem("carrinho") || "[]");
-  });
+  const [carrinho, setCarrinho] = useState([]);
 
   const [enviando, setEnviando] = useState(false);
   const [erro, setErro] = useState("");
@@ -29,11 +27,27 @@ function FinalizarPedido() {
   useEffect(() => {
     async function carregarPerfil() {
       try {
-        const { data: sessaoData } = await supabase.auth.getSession();
+        const { data: sessaoData, error: erroSessao } =
+          await supabase.auth.getSession();
+
+        if (erroSessao) throw erroSessao;
+
         const usuario = sessaoData.session?.user;
 
+        const chave = usuario
+          ? `carrinho_${usuario.id}`
+          : "carrinho_visitante";
+
+        setUsuarioId(usuario?.id || null);
+        setChaveCarrinho(chave);
+
+        const itensSalvos = JSON.parse(
+          localStorage.getItem(chave) || "[]"
+        );
+
+        setCarrinho(itensSalvos);
+
         if (usuario) {
-          setUsuarioId(usuario.id);
           setEmail(usuario.email || "");
 
           const { data, error } = await supabase
@@ -93,6 +107,22 @@ function FinalizarPedido() {
     setEnviando(true);
 
     try {
+      // Confirma que a sessão ainda pertence à conta que carregou o carrinho.
+      const { data: sessaoData, error: erroSessao } =
+        await supabase.auth.getSession();
+
+      if (erroSessao) throw erroSessao;
+
+      const usuarioAtual = sessaoData.session?.user;
+
+      if (
+        (usuarioAtual?.id || null) !== usuarioId
+      ) {
+        throw new Error(
+          "Sua conta foi alterada. Atualize a página antes de finalizar o pedido."
+        );
+      }
+
       // Salva o endereço como CASA, se o cliente desejar.
       if (usuarioId && salvarComoCasa) {
         const { error: erroEndereco } = await supabase
@@ -125,7 +155,11 @@ function FinalizarPedido() {
       setPedidoId(data);
       setTotalPedido(total);
 
-      localStorage.removeItem("carrinho");
+      // Limpa somente o carrinho da conta atual.
+      if (chaveCarrinho) {
+        localStorage.removeItem(chaveCarrinho);
+      }
+
       setCarrinho([]);
     } catch (error) {
       console.error("Erro ao finalizar pedido:", error);
@@ -159,7 +193,9 @@ function FinalizarPedido() {
             <h3>Pedido nº {pedidoId}</h3>
 
             <p><strong>Nome:</strong> {nome}</p>
-            <p><strong>Total:</strong> R$ {totalPedido.toFixed(2).replace(".", ",")}</p>
+            <p>
+              <strong>Total:</strong> R$ {totalPedido.toFixed(2).replace(".", ",")}
+            </p>
             <p><strong>Status:</strong> Pendente</p>
 
             <p>Obrigado por comprar com a gente!</p>

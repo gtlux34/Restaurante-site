@@ -53,11 +53,23 @@ function Produto() {
     carregarProduto();
   }, []);
 
-  function adicionarAoCarrinho() {
+  async function adicionarAoCarrinho() {
     if (!produto || !produto.disponivel) return;
 
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    if (error) {
+      setMensagem("Não foi possível identificar sua conta. Tente novamente.");
+      return;
+    }
+
+    // Cada usuário possui uma chave exclusiva para seu carrinho.
+    const chaveCarrinho = user
+      ? `carrinho_${user.id}`
+      : "carrinho_visitante";
+
     const carrinhoAtual = JSON.parse(
-      localStorage.getItem("carrinho") || "[]"
+      localStorage.getItem(chaveCarrinho) || "[]"
     );
 
     const produtoExistente = carrinhoAtual.find(
@@ -85,7 +97,11 @@ function Produto() {
       ];
     }
 
-    localStorage.setItem("carrinho", JSON.stringify(novoCarrinho));
+    localStorage.setItem(
+      chaveCarrinho,
+      JSON.stringify(novoCarrinho)
+    );
+
     setMensagem("Produto adicionado ao carrinho com sucesso!");
   }
 
