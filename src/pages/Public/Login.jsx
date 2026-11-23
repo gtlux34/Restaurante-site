@@ -28,7 +28,7 @@ function Login() {
 
     // Verifica se é administrador
     if (data.user?.app_metadata?.role === "admin") {
-      window.location.href = "/admin";
+      window.location.assign("/admin");
       return;
     }
 
@@ -46,8 +46,48 @@ function Login() {
       return;
     }
 
-    // Cliente autorizado
-    window.location.href = "/";
+    // Leva para a conta o que o cliente colocou no carrinho antes de entrar
+    juntarCarrinhoVisitante(data.user.id);
+
+    // Cliente autorizado: volta para a página que pediu o login, se houver
+    const voltar = new URLSearchParams(window.location.search).get("voltar");
+    const destinoSeguro =
+      voltar && voltar.startsWith("/") && !voltar.startsWith("//")
+        ? voltar
+        : "/";
+
+    window.location.assign(destinoSeguro);
+  }
+
+  function juntarCarrinhoVisitante(usuarioId) {
+    try {
+      const visitante = JSON.parse(
+        localStorage.getItem("carrinho_visitante") || "[]"
+      );
+
+      if (visitante.length === 0) return;
+
+      const chaveUsuario = `carrinho_${usuarioId}`;
+      const carrinhoUsuario = JSON.parse(
+        localStorage.getItem(chaveUsuario) || "[]"
+      );
+
+      for (const item of visitante) {
+        const existente = carrinhoUsuario.find((atual) => atual.id === item.id);
+
+        if (existente) {
+          existente.quantidade =
+            Number(existente.quantidade) + Number(item.quantidade);
+        } else {
+          carrinhoUsuario.push(item);
+        }
+      }
+
+      localStorage.setItem(chaveUsuario, JSON.stringify(carrinhoUsuario));
+      localStorage.removeItem("carrinho_visitante");
+    } catch (error) {
+      console.error("Erro ao juntar carrinho:", error);
+    }
   }
 
   return (

@@ -34,11 +34,16 @@ function FinalizarPedido() {
 
         const usuario = sessaoData.session?.user;
 
-        const chave = usuario
-          ? `carrinho_${usuario.id}`
-          : "carrinho_visitante";
+        // Somente clientes autenticados podem realizar pedidos.
+        // Depois do login, o cliente volta para esta página com o carrinho.
+        if (!usuario) {
+          window.location.replace("/login?voltar=/finalizar-pedido");
+          return;
+        }
 
-        setUsuarioId(usuario?.id || null);
+        const chave = `carrinho_${usuario.id}`;
+
+        setUsuarioId(usuario.id);
         setChaveCarrinho(chave);
 
         const itensSalvos = JSON.parse(
@@ -115,9 +120,12 @@ function FinalizarPedido() {
 
       const usuarioAtual = sessaoData.session?.user;
 
-      if (
-        (usuarioAtual?.id || null) !== usuarioId
-      ) {
+      if (!usuarioAtual) {
+        window.location.replace("/login?voltar=/finalizar-pedido");
+        return;
+      }
+
+      if (usuarioAtual.id !== usuarioId) {
         throw new Error(
           "Sua conta foi alterada. Atualize a página antes de finalizar o pedido."
         );

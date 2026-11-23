@@ -32,6 +32,11 @@ function Cardapio() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
 
+  // Categoria escolhida na página de Categorias (ex.: /cardapio?categoria=2)
+  const categoriaFiltro = new URLSearchParams(window.location.search).get(
+    "categoria"
+  );
+
   useEffect(() => {
     async function carregarCardapio() {
       setCarregando(true);
@@ -87,7 +92,24 @@ function Cardapio() {
       <main className="cardapio-conteudo">
         <h2>Nosso Cardápio</h2>
 
-        {categorias.map((categoria) => {
+        {categoriaFiltro && (
+          <p>
+            Mostrando apenas a categoria{" "}
+            <strong>
+              {categorias.find(
+                (categoria) => String(categoria.id) === categoriaFiltro
+              )?.nome || "selecionada"}
+            </strong>
+            . <a href="/cardapio">Ver cardápio completo</a>
+          </p>
+        )}
+
+        {categorias
+          .filter(
+            (categoria) =>
+              !categoriaFiltro || String(categoria.id) === categoriaFiltro
+          )
+          .map((categoria) => {
           const produtosDaCategoria = produtos.filter(
             (produto) =>
               Number(produto.categoria_id) === Number(categoria.id)

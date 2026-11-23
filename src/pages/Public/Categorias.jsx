@@ -4,6 +4,9 @@ import { supabase } from "../../supabase";
 
 function Categorias() {
   const [usuarioLogado, setUsuarioLogado] = useState(false);
+  const [categorias, setCategorias] = useState([]);
+  const [carregando, setCarregando] = useState(true);
+  const [erro, setErro] = useState("");
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -15,6 +18,38 @@ function Categorias() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       setUsuarioLogado(!!session);
     });
+
+    // Busca as categorias cadastradas no painel e quantos produtos cada uma tem
+    async function carregarCategorias() {
+      const { data: categoriasData, error: categoriasError } = await supabase
+        .from("categorias")
+        .select("id, nome")
+        .order("nome");
+
+      const { data: produtosData, error: produtosError } = await supabase
+        .from("produtos")
+        .select("categoria_id")
+        .eq("disponivel", true);
+
+      if (categoriasError || produtosError) {
+        console.error(categoriasError || produtosError);
+        setErro("Não foi possível carregar as categorias.");
+      } else {
+        setCategorias(
+          (categoriasData || []).map((categoria) => ({
+            ...categoria,
+            totalProdutos: (produtosData || []).filter(
+              (produto) =>
+                Number(produto.categoria_id) === Number(categoria.id)
+            ).length,
+          }))
+        );
+      }
+
+      setCarregando(false);
+    }
+
+    carregarCategorias();
 
     return () => subscription.unsubscribe();
   }, []);
@@ -37,23 +72,27 @@ function Categorias() {
       <main>
         <h2>Categorias</h2>
 
-        <section>
-          <h3>Hambúrgueres</h3>
-          <p>Confira nossos hambúrgueres artesanais preparados com ingredientes selecionados.</p>
-          <a href="/cardapio">Ver hambúrgueres</a>
-        </section>
-
-        <section>
-          <h3>Bebidas</h3>
-          <p>Refrigerantes e outras opções para acompanhar sua refeição.</p>
-          <a href="/cardapio">Ver bebidas</a>
-        </section>
-
-        <section>
-          <h3>Sobremesas</h3>
-          <p>Opções doces para finalizar sua experiência no RANGO DOS GURI.</p>
-          <a href="/cardapio">Ver sobremesas</a>
-        </section>
+        {carregando ? (
+          <p>Carregando categorias...</p>
+        ) : erro ? (
+          <p>{erro}</p>
+        ) : categorias.length === 0 ? (
+          <p>Nenhuma categoria cadastrada.</p>
+        ) : (
+          categorias.map((categoria) => (
+            <section key={categoria.id}>
+              <h3>{categoria.nome}</h3>
+              <p>
+                {categoria.totalProdutos === 1
+                  ? "1 produto disponível"
+                  : `${categoria.totalProdutos} produtos disponíveis`}
+              </p>
+              <a href={`/cardapio?categoria=${categoria.id}`}>
+                Ver {categoria.nome.toLowerCase()}
+              </a>
+            </section>
+          ))
+        )}
       </main>
 
       <footer>

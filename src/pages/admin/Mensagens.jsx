@@ -1,12 +1,21 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import { sairConta } from "../../utils";
+
+const formularioVazio = { nome: "", email: "", mensagem: "" };
 
 function Mensagens() {
   const [mensagens, setMensagens] = useState([]);
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
+  const [sucesso, setSucesso] = useState("");
   const [mensagemSelecionada, setMensagemSelecionada] = useState(null);
+
+  // Formulário de cadastro / edição
+  const [formulario, setFormulario] = useState(formularioVazio);
+  const [editandoId, setEditandoId] = useState(null);
+  const [salvando, setSalvando] = useState(false);
 
   useEffect(() => {
     buscarMensagens();
@@ -29,6 +38,90 @@ function Mensagens() {
     }
 
     setCarregando(false);
+  }
+
+  function atualizarCampo(event) {
+    const { name, value } = event.target;
+    setFormulario((atual) => ({ ...atual, [name]: value }));
+  }
+
+  function prepararEdicao(item) {
+    setEditandoId(item.id);
+    setFormulario({
+      nome: item.nome || "",
+      email: item.email || "",
+      mensagem: item.mensagem || "",
+    });
+    setErro("");
+    setSucesso("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function cancelarEdicao() {
+    setEditandoId(null);
+    setFormulario(formularioVazio);
+  }
+
+  async function salvarMensagem(event) {
+    event.preventDefault();
+    setErro("");
+    setSucesso("");
+
+    const dados = {
+      nome: formulario.nome.trim(),
+      email: formulario.email.trim(),
+      mensagem: formulario.mensagem.trim(),
+    };
+
+    if (!dados.nome || !dados.email || !dados.mensagem) {
+      setErro("Preencha nome, e-mail e mensagem.");
+      return;
+    }
+
+    setSalvando(true);
+
+    try {
+      if (editandoId) {
+        const { data, error } = await supabase
+          .from("mensagens")
+          .update(dados)
+          .eq("id", editandoId)
+          .select();
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+          throw new Error(
+            "O banco não permitiu editar esta mensagem. Verifique as permissões (RLS) da tabela mensagens."
+          );
+        }
+
+        setMensagens((atuais) =>
+          atuais.map((item) => (item.id === editandoId ? data[0] : item))
+        );
+
+        if (mensagemSelecionada?.id === editandoId) {
+          setMensagemSelecionada(data[0]);
+        }
+
+        setSucesso("Mensagem atualizada com sucesso!");
+      } else {
+        // Registra uma mensagem recebida por outro canal (telefone, balcão...)
+        const { error } = await supabase.from("mensagens").insert([dados]);
+
+        if (error) throw error;
+
+        setSucesso("Mensagem cadastrada com sucesso!");
+        await buscarMensagens();
+      }
+
+      cancelarEdicao();
+    } catch (error) {
+      console.error(error);
+      setErro(error.message || "Não foi possível salvar a mensagem.");
+    } finally {
+      setSalvando(false);
+    }
   }
 
   async function excluirMensagem(id) {
@@ -56,6 +149,10 @@ function Mensagens() {
     if (mensagemSelecionada?.id === id) {
       setMensagemSelecionada(null);
     }
+
+    if (editandoId === id) {
+      cancelarEdicao();
+    }
   }
 
   function formatarData(data) {
@@ -77,11 +174,88 @@ function Mensagens() {
         <a href="/admin/pedidos">Pedidos</a>
         <a href="/admin/clientes">Clientes</a>
         <a href="/admin/mensagens">Mensagens</a>
-        <a href="/login">Sair</a>
+        <a
+          href="#"
+          onClick={(event) => {
+            event.preventDefault();
+            sairConta();
+          }}
+        >
+          Sair
+        </a>
       </nav>
 
       <main>
         <h2>Mensagens recebidas</h2>
+
+        <section>
+          <h3>{editandoId ? "Editar mensagem" : "Cadastrar mensagem"}</h3>
+
+          {!editandoId && (
+            <p>
+              Use para registrar mensagens recebidas por telefone, WhatsApp ou
+              no balcão.
+            </p>
+          )}
+
+          <form onSubmit={salvarMensagem}>
+            <p>
+              <label>Nome *</label>
+              <br />
+              <input
+                type="text"
+                name="nome"
+                value={formulario.nome}
+                onChange={atualizarCampo}
+                required
+              />
+            </p>
+
+            <p>
+              <label>E-mail *</label>
+              <br />
+              <input
+                type="email"
+                name="email"
+                value={formulario.email}
+                onChange={atualizarCampo}
+                required
+              />
+            </p>
+
+            <p>
+              <label>Mensagem *</label>
+              <br />
+              <textarea
+                name="mensagem"
+                value={formulario.mensagem}
+                onChange={atualizarCampo}
+                rows={4}
+                required
+              />
+            </p>
+
+            <button type="submit" disabled={salvando}>
+              {salvando
+                ? "Salvando..."
+                : editandoId
+                  ? "Salvar alterações"
+                  : "Cadastrar mensagem"}
+            </button>
+
+            {editandoId && (
+              <>
+                {" "}
+                <button type="button" onClick={cancelarEdicao}>
+                  Cancelar edição
+                </button>
+              </>
+            )}
+          </form>
+        </section>
+
+        {erro && <p style={{ color: "#dc2626" }}>{erro}</p>}
+        {sucesso && <p style={{ color: "#16a34a" }}>{sucesso}</p>}
 
         <p>
           Total de mensagens: <strong>{mensagens.length}</strong>
@@ -90,8 +264,6 @@ function Mensagens() {
         <button onClick={buscarMensagens} disabled={carregando}>
           {carregando ? "Carregando..." : "Atualizar mensagens"}
         </button>
-
-        {erro && <p>{erro}</p>}
 
         {carregando ? (
           <p>Carregando mensagens...</p>
@@ -119,8 +291,10 @@ function Mensagens() {
                       onClick={() => setMensagemSelecionada(item)}
                     >
                       Visualizar
-                    </button>
-
+                    </button>{" "}
+                    <button onClick={() => prepararEdicao(item)}>
+                      Editar
+                    </button>{" "}
                     <button onClick={() => excluirMensagem(item.id)}>
                       Excluir
                     </button>
