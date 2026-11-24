@@ -1,4 +1,7 @@
-# 🍔 RANGO DOS GURI
+
+
+
+#  RANGO DOS GURI
 
 ### Sistema Web para Pedidos e Gerenciamento de Restaurante
 
@@ -8,9 +11,9 @@ O sistema também conta com um painel administrativo para o gerenciamento dos pr
 
 ---
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
-### 👤 Área do Cliente
+###  Área do Cliente
 
 - Cadastro e login de usuários.
 - Autenticação integrada ao Supabase.
@@ -23,7 +26,7 @@ O sistema também conta com um painel administrativo para o gerenciamento dos pr
 - Escolha de formas de pagamento para demonstração.
 - Gerenciamento dos dados da própria conta.
 
-### ⚙️ Painel Administrativo
+###  Painel Administrativo
 
 - Acesso exclusivo para administradores.
 - Cadastro, edição e exclusão de produtos.
@@ -31,7 +34,7 @@ O sistema também conta com um painel administrativo para o gerenciamento dos pr
 - Visualização e gerenciamento de pedidos.
 - Gerenciamento da conta administrativa.
 
-### 🛒 Sistema de Pedidos
+###  Sistema de Pedidos
 
 - Carrinho de compras.
 - Identificação dos dados do cliente.
@@ -43,7 +46,7 @@ O sistema também conta com um painel administrativo para o gerenciamento dos pr
 
 ---
 
-## 💻 Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 | Tecnologia | Descrição |
 | :--- | :--- |
@@ -57,7 +60,7 @@ O sistema também conta com um painel administrativo para o gerenciamento dos pr
 
 ---
 
-## 📂 Estrutura do Projeto
+##  Estrutura do Projeto
 
 ```text
 Restaurante-site/
@@ -75,8 +78,11 @@ Restaurante-site/
 ├── index.html
 ├── package.json
 └── README.md
+```
 
-## ⚙️ Como Executar o Projeto
+---
+
+##  Como Executar o Projeto
 
 ### 1. Pré-requisitos
 
@@ -130,3 +136,9 @@ Após executar o comando, o Vite exibirá no terminal o endereço local para ace
 ```text
 http://localhost:5173
 ```
+
+---
+
+## 👨‍💻 Projeto Acadêmico
+
+Projeto desenvolvido com o objetivo de aplicar conhecimentos de desenvolvimento web, integração com banco de dados, autenticação de usuários e controle de versões.
