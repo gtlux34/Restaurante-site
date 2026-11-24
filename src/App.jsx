@@ -9,6 +9,7 @@ import Contato from "./pages/Public/Contato";
 import Produto from "./pages/Public/Produto";
 import Login from "./pages/Public/Login";
 import Cadastro from "./pages/Public/Cadastro";
+import RedefinirSenha from "./pages/Public/RedefinirSenha";
 import Carrinho from "./pages/Public/Carrinho";
 import FinalizarPedido from "./pages/Public/FinalizarPedido";
 import MinhaConta from "./pages/Public/MinhaConta";
@@ -137,6 +138,7 @@ function App() {
   else if (pagina === "/produto") conteudo = <Produto />;
   else if (pagina === "/login") conteudo = <Login />;
   else if (pagina === "/cadastro") conteudo = <Cadastro />;
+  else if (pagina === "/redefinir-senha") conteudo = <RedefinirSenha />;
   else if (pagina === "/carrinho") conteudo = <Carrinho />;
   else if (pagina === "/finalizar-pedido") conteudo = <FinalizarPedido />;
   else if (pagina === "/minha-conta") conteudo = <MinhaConta />;
