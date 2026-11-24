@@ -7,12 +7,15 @@ function Login() {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
   const [erro, setErro] = useState("");
+  const [mensagem, setMensagem] = useState("");
   const [carregando, setCarregando] = useState(false);
+  const [enviandoRecuperacao, setEnviandoRecuperacao] = useState(false);
 
   async function fazerLogin(e) {
     e.preventDefault();
 
     setErro("");
+    setMensagem("");
     setCarregando(true);
 
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -26,13 +29,11 @@ function Login() {
       return;
     }
 
-    // Verifica se é administrador
     if (data.user?.app_metadata?.role === "admin") {
       window.location.assign("/admin");
       return;
     }
 
-    // Verifica se é cliente
     const { data: usuario, error: erroUsuario } = await supabase
       .from("usuarios")
       .select("tipo")
@@ -41,22 +42,54 @@ function Login() {
 
     if (erroUsuario || usuario?.tipo !== "cliente") {
       await supabase.auth.signOut();
-      setErro("Não foi possível identificar seu cadastro. Entre em contato com o restaurante.");
+      setErro(
+        "Não foi possível identificar seu cadastro. Entre em contato com o restaurante."
+      );
       setCarregando(false);
       return;
     }
 
-    // Leva para a conta o que o cliente colocou no carrinho antes de entrar
     juntarCarrinhoVisitante(data.user.id);
 
-    // Cliente autorizado: volta para a página que pediu o login, se houver
     const voltar = new URLSearchParams(window.location.search).get("voltar");
+
     const destinoSeguro =
       voltar && voltar.startsWith("/") && !voltar.startsWith("//")
         ? voltar
         : "/";
 
     window.location.assign(destinoSeguro);
+  }
+
+  async function recuperarSenha(e) {
+    e.preventDefault();
+
+    setErro("");
+    setMensagem("");
+
+    if (!email.trim()) {
+      setErro("Digite seu e-mail para recuperar sua senha.");
+      return;
+    }
+
+    setEnviandoRecuperacao(true);
+
+    const { error } = await supabase.auth.resetPasswordForEmail(
+      email.trim(),
+      {
+        redirectTo: `${window.location.origin}/redefinir-senha`,
+      }
+    );
+
+    if (error) {
+      setErro("Não foi possível enviar o e-mail. Tente novamente.");
+    } else {
+      setMensagem(
+        "Se o e-mail estiver cadastrado, você receberá um link para redefinir sua senha. Verifique também sua caixa de spam."
+      );
+    }
+
+    setEnviandoRecuperacao(false);
   }
 
   function juntarCarrinhoVisitante(usuarioId) {
@@ -73,7 +106,9 @@ function Login() {
       );
 
       for (const item of visitante) {
-        const existente = carrinhoUsuario.find((atual) => atual.id === item.id);
+        const existente = carrinhoUsuario.find(
+          (atual) => atual.id === item.id
+        );
 
         if (existente) {
           existente.quantidade =
@@ -83,7 +118,11 @@ function Login() {
         }
       }
 
-      localStorage.setItem(chaveUsuario, JSON.stringify(carrinhoUsuario));
+      localStorage.setItem(
+        chaveUsuario,
+        JSON.stringify(carrinhoUsuario)
+      );
+
       localStorage.removeItem("carrinho_visitante");
     } catch (error) {
       console.error("Erro ao juntar carrinho:", error);
@@ -110,6 +149,12 @@ function Login() {
             <span>RANGO DOS GURI</span>
             <h2>Bem-vindo!</h2>
             <p>Entre na sua conta para aproveitar nosso restaurante.</p>
+
+            <img
+              src="/mascote3.png"
+              alt="Mascote Rango dos Guri"
+              className="login-mascote"
+            />
           </div>
 
           <div id="autenticacao" className="autenticacao">
@@ -127,6 +172,7 @@ function Login() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Digite seu e-mail"
+                  autoComplete="email"
                   required
                 />
               </div>
@@ -139,11 +185,34 @@ function Login() {
                   value={senha}
                   onChange={(e) => setSenha(e.target.value)}
                   placeholder="Digite sua senha"
+                  autoComplete="current-password"
                   required
                 />
               </div>
 
-              {erro && <p style={{ color: "red" }}>{erro}</p>}
+              <div className="login-recuperar">
+                <button
+                  type="button"
+                  onClick={recuperarSenha}
+                  disabled={enviandoRecuperacao}
+                >
+                  {enviandoRecuperacao
+                    ? "ENVIANDO LINK..."
+                    : "ESQUECEU SUA SENHA? →"}
+                </button>
+              </div>
+
+              {erro && (
+                <p className="login-mensagem erro">
+                  {erro}
+                </p>
+              )}
+
+              {mensagem && (
+                <p className="login-mensagem sucesso">
+                  {mensagem}
+                </p>
+              )}
 
               <button type="submit" disabled={carregando}>
                 {carregando ? "Entrando..." : "Entrar"}

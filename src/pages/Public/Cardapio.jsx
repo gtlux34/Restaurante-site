@@ -85,6 +85,7 @@ function Cardapio() {
           <a href="/">Início</a>
           <a href="/cardapio">Cardápio</a>
           <a href="/categorias">Categorias</a>
+          <a href="/carrinho">Carrinho</a>
           <a href="/contato">Contato</a>
         </nav>
       </header>
@@ -110,59 +111,59 @@ function Cardapio() {
               !categoriaFiltro || String(categoria.id) === categoriaFiltro
           )
           .map((categoria) => {
-          const produtosDaCategoria = produtos.filter(
-            (produto) =>
-              Number(produto.categoria_id) === Number(categoria.id)
-          );
+            const produtosDaCategoria = produtos.filter(
+              (produto) =>
+                Number(produto.categoria_id) === Number(categoria.id)
+            );
 
-          return (
-            <section
-              key={categoria.id}
-              className="cardapio-categoria"
-            >
-              <h3>{categoria.nome}</h3>
+            return (
+              <section
+                key={categoria.id}
+                className="cardapio-categoria"
+              >
+                <h3>{categoria.nome}</h3>
 
-              {produtosDaCategoria.length === 0 ? (
-                <p>Nenhum produto disponível nesta categoria.</p>
-              ) : (
-                <div className="cardapio-grade">
-                  {produtosDaCategoria.map((produto) => (
-                    <article
-                      key={produto.id}
-                      className="cardapio-produto"
-                    >
-                      <ImagemProduto
-                        imagem={produto.imagem}
-                        nome={produto.nome}
-                      />
+                {produtosDaCategoria.length === 0 ? (
+                  <p>Nenhum produto disponível nesta categoria.</p>
+                ) : (
+                  <div className="cardapio-grade">
+                    {produtosDaCategoria.map((produto) => (
+                      <article
+                        key={produto.id}
+                        className="cardapio-produto"
+                      >
+                        <ImagemProduto
+                          imagem={produto.imagem}
+                          nome={produto.nome}
+                        />
 
-                      <div className="cardapio-produto-info">
-                        <h4>{produto.nome}</h4>
+                        <div className="cardapio-produto-info">
+                          <h4>{produto.nome}</h4>
 
-                        <p className="cardapio-descricao">
-                          {produto.descricao}
-                        </p>
+                          <p className="cardapio-descricao">
+                            {produto.descricao}
+                          </p>
 
-                        <p className="cardapio-preco">
-                          R${" "}
-                          {Number(produto.preco)
-                            .toFixed(2)
-                            .replace(".", ",")}
-                        </p>
+                          <p className="cardapio-preco">
+                            R${" "}
+                            {Number(produto.preco)
+                              .toFixed(2)
+                              .replace(".", ",")}
+                          </p>
 
-                        <a href={`/produto?id=${produto.id}`}>
-                          <button type="button">
-                            Ver detalhes
-                          </button>
-                        </a>
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              )}
-            </section>
-          );
-        })}
+                          <a href={`/produto?id=${produto.id}`}>
+                            <button type="button">
+                              Ver detalhes
+                            </button>
+                          </a>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                )}
+              </section>
+            );
+          })}
       </main>
 
       <footer>

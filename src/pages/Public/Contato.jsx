@@ -1,4 +1,5 @@
-import { useState } from "react";
+
+import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
 
 function Contato() {
@@ -7,6 +8,21 @@ function Contato() {
   const [mensagem, setMensagem] = useState("");
   const [enviando, setEnviando] = useState(false);
   const [retorno, setRetorno] = useState("");
+  const [usuarioLogado, setUsuarioLogado] = useState(false);
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      setUsuarioLogado(!!data.session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUsuarioLogado(!!session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   async function enviarMensagem(event) {
     event.preventDefault();
@@ -39,8 +55,12 @@ function Contato() {
           <a href="/">Início</a>
           <a href="/cardapio">Cardápio</a>
           <a href="/categorias">Categorias</a>
+          <a href="/carrinho">Carrinho</a>
           <a href="/contato">Contato</a>
-          <a href="/login">Entrar</a>
+
+          {!usuarioLogado && (
+            <a href="/login">Entrar</a>
+          )}
         </nav>
       </header>
 

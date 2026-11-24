@@ -63,6 +63,7 @@ function Categorias() {
           <a href="/">Início</a>
           <a href="/cardapio">Cardápio</a>
           <a href="/categorias">Categorias</a>
+          <a href="/carrinho">Carrinho</a>
           <a href="/contato">Contato</a>
 
           {!usuarioLogado && <a href="/login">Entrar</a>}

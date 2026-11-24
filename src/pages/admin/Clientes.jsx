@@ -18,7 +18,6 @@ function Clientes() {
   const [sucesso, setSucesso] = useState("");
   const [clienteSelecionado, setClienteSelecionado] = useState(null);
 
-  // Formulário de cadastro / edição
   const [formulario, setFormulario] = useState(formularioVazio);
   const [editandoId, setEditandoId] = useState(null);
   const [salvando, setSalvando] = useState(false);
@@ -91,7 +90,6 @@ function Clientes() {
 
     try {
       if (editandoId) {
-        // Edita os dados do cliente
         const { data, error } = await supabase
           .from("usuarios")
           .update({ nome, telefone, endereco_casa: enderecoCasa })
@@ -108,7 +106,6 @@ function Clientes() {
 
         setSucesso("Cliente atualizado com sucesso!");
       } else {
-        // Cadastra um novo cliente (cria o login no Supabase Auth)
         const email = formulario.email.trim();
 
         if (!email || formulario.senha.length < 6) {
@@ -127,12 +124,10 @@ function Clientes() {
 
         if (error) throw error;
 
-        // O Supabase devolve um usuário sem identidades quando o e-mail já existe
         if (!data.user || data.user.identities?.length === 0) {
           throw new Error("Já existe uma conta com este e-mail.");
         }
 
-        // Salva o endereço, se informado
         if (enderecoCasa) {
           await supabase
             .from("usuarios")
@@ -176,7 +171,6 @@ function Clientes() {
         .select();
 
       if (error) {
-        // 23503 = o cliente ainda possui pedidos vinculados
         if (error.code === "23503") {
           throw new Error(
             "Este cliente possui pedidos vinculados. Exclua os pedidos dele antes."
@@ -191,10 +185,17 @@ function Clientes() {
         );
       }
 
-      setClientes((atuais) => atuais.filter((item) => item.id !== cliente.id));
+      setClientes((atuais) =>
+        atuais.filter((item) => item.id !== cliente.id)
+      );
 
-      if (clienteSelecionado?.id === cliente.id) setClienteSelecionado(null);
-      if (editandoId === cliente.id) cancelarEdicao();
+      if (clienteSelecionado?.id === cliente.id) {
+        setClienteSelecionado(null);
+      }
+
+      if (editandoId === cliente.id) {
+        cancelarEdicao();
+      }
 
       setSucesso("Cliente excluído com sucesso!");
     } catch (error) {
@@ -210,6 +211,7 @@ function Clientes() {
       <header>
         <h1>Clientes - RANGO DOS GURI</h1>
         <a href="/admin">Voltar ao painel</a>
+        <a href="/">Voltar para o site</a>
       </header>
 
       <nav>
@@ -217,10 +219,9 @@ function Clientes() {
         <a href="/admin/produtos">Produtos</a>
         <a href="/admin/categorias">Categorias</a>
         <a href="/admin/pedidos">Pedidos</a>
-        <a href="/admin/clientes">Clientes</a>
+        <a href="/admin/clientes" className="ativo">Clientes</a>
         <a href="/admin/mensagens">Mensagens</a>
         <a href="/admin/minha-conta">Minha Conta</a>
-
         <a
           href="#"
           onClick={(event) => {
@@ -232,25 +233,33 @@ function Clientes() {
         </a>
       </nav>
 
-      <main>
+      <main className="clientes-admin">
         <h2>Gerenciar Clientes</h2>
         <p>Cadastre, visualize, edite e exclua os clientes do restaurante.</p>
 
-        <section
-          style={{
-            border: "1px solid #ddd",
-            padding: "20px",
-            margin: "20px 0",
-            borderRadius: "8px",
-          }}
-        >
-          <h3>{editandoId ? "Editar cliente" : "Cadastrar novo cliente"}</h3>
+        {erro && (
+          <p style={{ color: "#dc2626" }}>
+            {erro}
+          </p>
+        )}
+
+        {sucesso && (
+          <p style={{ color: "#16a34a" }}>
+            {sucesso}
+          </p>
+        )}
+
+        <section>
+          <h3>
+            {editandoId ? "Editar cliente" : "Cadastrar novo cliente"}
+          </h3>
 
           <form onSubmit={salvarCliente}>
             <p>
-              <label>Nome completo *</label>
+              <label htmlFor="cliente-nome">Nome completo *</label>
               <br />
               <input
+                id="cliente-nome"
                 type="text"
                 name="nome"
                 value={formulario.nome}
@@ -262,9 +271,10 @@ function Clientes() {
             {!editandoId && (
               <>
                 <p>
-                  <label>E-mail *</label>
+                  <label htmlFor="cliente-email">E-mail *</label>
                   <br />
                   <input
+                    id="cliente-email"
                     type="email"
                     name="email"
                     value={formulario.email}
@@ -274,9 +284,12 @@ function Clientes() {
                 </p>
 
                 <p>
-                  <label>Senha inicial * (mínimo 6 caracteres)</label>
+                  <label htmlFor="cliente-senha">
+                    Senha inicial * (mínimo 6 caracteres)
+                  </label>
                   <br />
                   <input
+                    id="cliente-senha"
                     type="password"
                     name="senha"
                     value={formulario.senha}
@@ -289,9 +302,10 @@ function Clientes() {
             )}
 
             <p>
-              <label>Telefone *</label>
+              <label htmlFor="cliente-telefone">Telefone *</label>
               <br />
               <input
+                id="cliente-telefone"
                 type="tel"
                 name="telefone"
                 value={formulario.telefone}
@@ -301,9 +315,10 @@ function Clientes() {
             </p>
 
             <p>
-              <label>Endereço</label>
+              <label htmlFor="cliente-endereco">Endereço</label>
               <br />
               <input
+                id="cliente-endereco"
                 type="text"
                 name="endereco_casa"
                 value={formulario.endereco_casa}
@@ -320,91 +335,84 @@ function Clientes() {
             </button>
 
             {editandoId && (
-              <>
-                {" "}
-                <button type="button" onClick={cancelarEdicao}>
-                  Cancelar edição
-                </button>
-              </>
+              <button
+                type="button"
+                onClick={cancelarEdicao}
+              >
+                Cancelar edição
+              </button>
             )}
           </form>
         </section>
 
-        {erro && <p style={{ color: "#dc2626" }}>{erro}</p>}
-        {sucesso && <p style={{ color: "#16a34a" }}>{sucesso}</p>}
+        <section>
+          <h3>Total de clientes: {clientes.length}</h3>
 
-        <h3>Total de clientes: {clientes.length}</h3>
+          <button
+            type="button"
+            onClick={carregarClientes}
+            disabled={carregando}
+          >
+            {carregando ? "Carregando..." : "Atualizar clientes"}
+          </button>
 
-        <button
-          type="button"
-          onClick={carregarClientes}
-          disabled={carregando}
-        >
-          {carregando ? "Carregando..." : "Atualizar clientes"}
-        </button>
-
-        {carregando ? (
-          <p>Carregando clientes...</p>
-        ) : clientes.length === 0 ? (
-          <p>Nenhum cliente cadastrado.</p>
-        ) : (
-          <div style={{ overflowX: "auto", marginTop: "20px" }}>
-            <table border="1" cellPadding="10" width="100%">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Nome</th>
-                  <th>Telefone</th>
-                  <th>Endereço</th>
-                  <th>Ações</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {clientes.map((cliente) => (
-                  <tr key={cliente.id}>
-                    <td>{cliente.id}</td>
-                    <td>{cliente.nome || "Não informado"}</td>
-                    <td>{cliente.telefone || "Não informado"}</td>
-                    <td>{cliente.endereco_casa || "Não informado"}</td>
-                    <td>
-                      <button
-                        type="button"
-                        onClick={() => setClienteSelecionado(cliente)}
-                      >
-                        Visualizar
-                      </button>{" "}
-                      <button
-                        type="button"
-                        onClick={() => prepararEdicao(cliente)}
-                      >
-                        Editar
-                      </button>{" "}
-                      <button
-                        type="button"
-                        onClick={() => excluirCliente(cliente)}
-                        disabled={excluindo === cliente.id}
-                        style={{ backgroundColor: "#dc2626", color: "white" }}
-                      >
-                        {excluindo === cliente.id ? "Excluindo..." : "Excluir"}
-                      </button>
-                    </td>
+          {carregando ? (
+            <p>Carregando clientes...</p>
+          ) : clientes.length === 0 ? (
+            <p>Nenhum cliente cadastrado.</p>
+          ) : (
+            <div style={{ overflowX: "auto", marginTop: "20px" }}>
+              <table border="1" cellPadding="10" width="100%">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Telefone</th>
+                    <th>Endereço</th>
+                    <th>Ações</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+                </thead>
+
+                <tbody>
+                  {clientes.map((cliente) => (
+                    <tr key={cliente.id}>
+                      <td>{cliente.id}</td>
+                      <td>{cliente.nome || "Não informado"}</td>
+                      <td>{cliente.telefone || "Não informado"}</td>
+                      <td>{cliente.endereco_casa || "Não informado"}</td>
+                      <td>
+                        <button
+                          type="button"
+                          onClick={() => setClienteSelecionado(cliente)}
+                        >
+                          Visualizar
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => prepararEdicao(cliente)}
+                        >
+                          Editar
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => excluirCliente(cliente)}
+                          disabled={excluindo === cliente.id}
+                        >
+                          {excluindo === cliente.id ? "Excluindo..." : "Excluir"}
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </section>
 
         {clienteSelecionado && (
-          <section
-            style={{
-              border: "1px solid #ddd",
-              padding: "20px",
-              marginTop: "25px",
-              borderRadius: "8px",
-            }}
-          >
+          <section>
             <h2>Detalhes do cliente</h2>
 
             <p><strong>ID:</strong> {clienteSelecionado.id}</p>

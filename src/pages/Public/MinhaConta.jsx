@@ -17,6 +17,12 @@ function MinhaConta() {
   const [enderecoCasa, setEnderecoCasa] = useState("");
   const [pedidos, setPedidos] = useState([]);
 
+  // Estados para alteração de senha
+  const [senhaAtual, setSenhaAtual] = useState("");
+  const [novaSenha, setNovaSenha] = useState("");
+  const [confirmarNovaSenha, setConfirmarNovaSenha] = useState("");
+  const [salvandoSenha, setSalvandoSenha] = useState(false);
+
   useEffect(() => {
     carregarConta();
   }, []);
@@ -104,6 +110,70 @@ function MinhaConta() {
     setSalvando(false);
   }
 
+  // Alterar senha do cliente
+  async function alterarSenha(event) {
+    event.preventDefault();
+
+    setErro("");
+    setMensagem("");
+
+    if (!senhaAtual || !novaSenha || !confirmarNovaSenha) {
+      setErro("Preencha todos os campos de senha.");
+      return;
+    }
+
+    if (novaSenha.length < 6) {
+      setErro("A nova senha precisa ter pelo menos 6 caracteres.");
+      return;
+    }
+
+    if (novaSenha !== confirmarNovaSenha) {
+      setErro("A confirmação da nova senha não corresponde.");
+      return;
+    }
+
+    if (senhaAtual === novaSenha) {
+      setErro("A nova senha precisa ser diferente da senha atual.");
+      return;
+    }
+
+    setSalvandoSenha(true);
+
+    // Verifica a senha atual
+    const { error: verificacaoError } =
+      await supabase.auth.signInWithPassword({
+        email,
+        password: senhaAtual,
+      });
+
+    if (verificacaoError) {
+      setErro("A senha atual está incorreta.");
+      setSalvandoSenha(false);
+      return;
+    }
+
+    // Atualiza a senha no Supabase
+    const { error: atualizacaoError } =
+      await supabase.auth.updateUser({
+        password: novaSenha,
+      });
+
+    if (atualizacaoError) {
+      setErro(
+        "Não foi possível alterar sua senha: " +
+          atualizacaoError.message
+      );
+    } else {
+      setMensagem("Sua senha foi alterada com sucesso!");
+
+      setSenhaAtual("");
+      setNovaSenha("");
+      setConfirmarNovaSenha("");
+    }
+
+    setSalvandoSenha(false);
+  }
+
   function formatarData(data) {
     return new Date(data).toLocaleDateString("pt-BR");
   }
@@ -147,6 +217,7 @@ function MinhaConta() {
           <a href="/">Início</a>
           <a href="/cardapio">Cardápio</a>
           <a href="/categorias">Categorias</a>
+          <a href="/carrinho">Carrinho</a>
           <a href="/contato">Contato</a>
           <a href="/minha-conta" className="home-login">
             Minha Conta
@@ -164,7 +235,9 @@ function MinhaConta() {
             <h1>
               SEJA BEM-VINDO
               <br />
-              <span>{nome ? nome.split(" ")[0].toUpperCase() : "AO RANGO"}!</span>
+              <span>
+                {nome ? nome.split(" ")[0].toUpperCase() : "AO RANGO"}!
+              </span>
             </h1>
 
             <p>
@@ -196,6 +269,7 @@ function MinhaConta() {
           </div>
         )}
 
+        {/* Dados pessoais */}
         <section className="conta-secao">
           <div className="conta-titulo-secao">
             <div>
@@ -263,10 +337,81 @@ function MinhaConta() {
           </div>
         </section>
 
+        {/* Alteração de senha */}
         <section className="conta-secao">
           <div className="conta-titulo-secao">
             <div>
-              <span className="conta-subtitulo">ACOMPANHE SEUS RANGOS</span>
+              <span className="conta-subtitulo">SEGURANÇA DA CONTA</span>
+              <h2>ALTERAR SENHA</h2>
+            </div>
+            <span className="conta-icone-secao">🔒</span>
+          </div>
+
+          <div className="conta-dados-card">
+            <div className="conta-card-topo">
+              <span>✦</span>
+              <h3>ATUALIZE SUA SENHA</h3>
+            </div>
+
+            <form onSubmit={alterarSenha} className="conta-formulario">
+              <div className="conta-campo campo-completo">
+                <label>Senha atual</label>
+                <input
+                  type="password"
+                  value={senhaAtual}
+                  onChange={(e) => setSenhaAtual(e.target.value)}
+                  placeholder="Digite sua senha atual"
+                  autoComplete="current-password"
+                  required
+                />
+              </div>
+
+              <div className="conta-campo">
+                <label>Nova senha</label>
+                <input
+                  type="password"
+                  value={novaSenha}
+                  onChange={(e) => setNovaSenha(e.target.value)}
+                  placeholder="Digite a nova senha"
+                  autoComplete="new-password"
+                  minLength={6}
+                  required
+                />
+              </div>
+
+              <div className="conta-campo">
+                <label>Confirmar nova senha</label>
+                <input
+                  type="password"
+                  value={confirmarNovaSenha}
+                  onChange={(e) =>
+                    setConfirmarNovaSenha(e.target.value)
+                  }
+                  placeholder="Confirme sua nova senha"
+                  autoComplete="new-password"
+                  minLength={6}
+                  required
+                />
+              </div>
+
+              <div className="conta-acoes campo-completo">
+                <button type="submit" disabled={salvandoSenha}>
+                  {salvandoSenha
+                    ? "ALTERANDO..."
+                    : "ALTERAR MINHA SENHA →"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        {/* Histórico de pedidos */}
+        <section className="conta-secao">
+          <div className="conta-titulo-secao">
+            <div>
+              <span className="conta-subtitulo">
+                ACOMPANHE SEUS RANGOS
+              </span>
               <h2>MEUS PEDIDOS</h2>
             </div>
             <span className="conta-icone-secao">🛍️</span>
@@ -307,12 +452,12 @@ function MinhaConta() {
 
                   <div className="conta-pedido-info">
                     <p>
-                      <strong> Data:</strong>{" "}
+                      <strong>Data:</strong>{" "}
                       {formatarData(pedido.created_at)}
                     </p>
 
                     <p>
-                      <strong> Valor:</strong>{" "}
+                      <strong>Valor:</strong>{" "}
                       {formatarMoeda(pedido.valor_total)}
                     </p>
 
@@ -327,6 +472,7 @@ function MinhaConta() {
           )}
         </section>
 
+        {/* Sair da conta */}
         <section className="conta-sair">
           <div>
             <h3>VAI SAIR AGORA?</h3>

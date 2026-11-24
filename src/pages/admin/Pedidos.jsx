@@ -352,16 +352,18 @@ function Pedidos() {
   return (
     <>
       <header>
-        <h1>Pedidos</h1>
-        <a href="/admin">Voltar ao painel</a>
+        <h1>Pedidos - RANGO DOS GURI</h1>
+        <a href="/">Voltar para o site</a>
       </header>
 
       <nav>
+        <a href="/admin">Painel</a>
         <a href="/admin/produtos">Produtos</a>
         <a href="/admin/categorias">Categorias</a>
-        <a href="/admin/pedidos">Pedidos</a>
+        <a href="/admin/pedidos" className="ativo">Pedidos</a>
         <a href="/admin/clientes">Clientes</a>
         <a href="/admin/mensagens">Mensagens</a>
+        <a href="/admin/minha-conta">Minha Conta</a>
         <a
           href="#"
           onClick={(event) => {

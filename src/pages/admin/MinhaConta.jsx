@@ -631,7 +631,7 @@ function MinhaContaAdmin() {
         </a>
 
         <nav className="conta-admin-nav">
-          <a href="/">Início</a>
+          <a href="/">Voltar para o site</a>
           <a href="/admin">Painel</a>
           <a href="/admin/produtos">Produtos</a>
           <a href="/admin/categorias">Categorias</a>
@@ -639,10 +639,15 @@ function MinhaContaAdmin() {
           <a href="/admin/clientes">Clientes</a>
           <a href="/admin/mensagens">Mensagens</a>
           <a href="/admin/minha-conta" className="ativo">Minha Conta</a>
-          <a href="#" onClick={(event) => {
-            event.preventDefault();
-            sairDaConta();
-          }}>Sair</a>
+          <a
+            href="#"
+            onClick={(event) => {
+              event.preventDefault();
+              sairDaConta();
+            }}
+          >
+            Sair
+          </a>
         </nav>
       </header>
 

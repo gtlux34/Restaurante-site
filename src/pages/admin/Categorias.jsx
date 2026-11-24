@@ -144,7 +144,7 @@ function CategoriasAdmin() {
       <nav>
         <a href="/admin">Painel</a>
         <a href="/admin/produtos">Produtos</a>
-        <a href="/admin/categorias">Categorias</a>
+        <a href="/admin/categorias" className="ativo">Categorias</a>
         <a href="/admin/pedidos">Pedidos</a>
         <a href="/admin/clientes">Clientes</a>
         <a href="/admin/mensagens">Mensagens</a>
@@ -241,11 +241,7 @@ function CategoriasAdmin() {
             <p>Nenhuma categoria cadastrada.</p>
           ) : (
             <div style={{ overflowX: "auto" }}>
-              <table
-                border="1"
-                cellPadding="10"
-                width="100%"
-              >
+              <table border="1" cellPadding="10" width="100%">
                 <thead>
                   <tr>
                     <th>ID</th>

@@ -10,6 +10,7 @@ function Produto() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
   const [mensagem, setMensagem] = useState("");
+  const [precisaLogin, setPrecisaLogin] = useState(false);
   const [quantidade, setQuantidade] = useState(1);
 
   useEffect(() => {
@@ -56,6 +57,9 @@ function Produto() {
   async function adicionarAoCarrinho() {
     if (!produto || !produto.disponivel) return;
 
+    setMensagem("");
+    setPrecisaLogin(false);
+
     const { data: { user }, error } = await supabase.auth.getUser();
 
     if (error) {
@@ -63,10 +67,14 @@ function Produto() {
       return;
     }
 
+    // Exige login antes de adicionar o produto.
+    if (!user) {
+      setPrecisaLogin(true);
+      return;
+    }
+
     // Cada usuário possui uma chave exclusiva para seu carrinho.
-    const chaveCarrinho = user
-      ? `carrinho_${user.id}`
-      : "carrinho_visitante";
+    const chaveCarrinho = `carrinho_${user.id}`;
 
     const carrinhoAtual = JSON.parse(
       localStorage.getItem(chaveCarrinho) || "[]"
@@ -124,6 +132,9 @@ function Produto() {
       </div>
     );
   }
+
+  const voltarParaProduto = `/produto?id=${produto.id}`;
+  const linkLogin = `/login?voltar=${encodeURIComponent(voltarParaProduto)}`;
 
   return (
     <div className="produto-page">
@@ -252,6 +263,26 @@ function Produto() {
                   <span>→</span>
                 </button>
               </>
+            )}
+
+            {precisaLogin && (
+              <div className="produto-mensagem-sucesso">
+                <strong>Entre na sua conta para continuar!</strong>
+
+                <p>
+                  Para adicionar produtos ao carrinho, você precisa estar
+                  conectado à sua conta.
+                </p>
+
+                <a href={linkLogin}>
+                  FAZER LOGIN →
+                </a>
+
+                <p>
+                  Ainda não tem uma conta?
+                  <a href="/cadastro"> CRIE SUA CONTA</a>
+                </p>
+              </div>
             )}
 
             {mensagem && (

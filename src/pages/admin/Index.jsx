@@ -125,11 +125,11 @@ function Admin() {
       <header>
         <h1>Painel Administrativo</h1>
         <p>Restaurante RANGO DOS GURI</p>
+        <a href="/">Voltar para o site</a>
       </header>
 
       <nav>
-        <a href="/">Início</a>
-        <a href="/carrinho">Carrinho</a>
+        <a href="/admin" className="ativo">Início</a>
         <a href="/admin/produtos">Produtos</a>
         <a href="/admin/categorias">Categorias</a>
         <a href="/admin/pedidos">Pedidos</a>
@@ -281,7 +281,7 @@ function Admin() {
 
           <article>
             <h3>Minha Conta</h3>
-            <p>Visualize seu Gmail e altere sua senha de administrador.</p>
+            <p>Visualize seu e-mail e altere sua senha de administrador.</p>
             <a href="/admin/minha-conta">Acessar minha conta</a>
           </article>
         </section>

@@ -1,6 +1,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabase";
+import { sairConta } from "../../utils";
 
 function Produtos() {
   const [produtos, setProdutos] = useState([]);
@@ -44,7 +45,25 @@ function Produtos() {
   }
 
   useEffect(() => {
+    // Aplica o mesmo fundo bege das outras páginas
+    const fundoAnterior = {
+      cor: document.body.style.backgroundColor,
+      imagem: document.body.style.backgroundImage,
+      tamanho: document.body.style.backgroundSize,
+    };
+
+    document.body.style.backgroundColor = "#f4e7c1";
+    document.body.style.backgroundImage =
+      "radial-gradient(rgba(107, 63, 29, 0.09) 1.2px, transparent 1.2px)";
+    document.body.style.backgroundSize = "22px 22px";
+
     carregarDados();
+
+    return () => {
+      document.body.style.backgroundColor = fundoAnterior.cor;
+      document.body.style.backgroundImage = fundoAnterior.imagem;
+      document.body.style.backgroundSize = fundoAnterior.tamanho;
+    };
   }, []);
 
   function atualizarCampo(event) {
@@ -129,25 +148,37 @@ function Produtos() {
     }
   }
 
-  const imagemValida = formulario.imagem.trim().startsWith("https://") ||
+  const imagemValida =
+    formulario.imagem.trim().startsWith("https://") ||
     formulario.imagem.trim().startsWith("http://");
 
   return (
     <>
       <header>
         <h1>Produtos - RANGO DOS GURI</h1>
-        <a href="/admin">Voltar ao painel</a>
+        <a href="/">Voltar para o site</a>
       </header>
 
       <nav>
-        <a href="/admin/produtos">Produtos</a>
+        <a href="/admin">Painel</a>
+        <a href="/admin/produtos" className="ativo">Produtos</a>
         <a href="/admin/categorias">Categorias</a>
         <a href="/admin/pedidos">Pedidos</a>
         <a href="/admin/clientes">Clientes</a>
         <a href="/admin/mensagens">Mensagens</a>
+        <a href="/admin/minha-conta">Minha Conta</a>
+        <a
+          href="#"
+          onClick={(event) => {
+            event.preventDefault();
+            sairConta();
+          }}
+        >
+          Sair
+        </a>
       </nav>
 
-      <main className="produtos-admin">
+      <main className="produtos-admin" style={{ backgroundColor: "transparent" }}>
         <h2>Gerenciar Produtos</h2>
         <p>Cadastre e organize os produtos do seu cardápio.</p>
 

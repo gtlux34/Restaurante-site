@@ -12,7 +12,6 @@ function Mensagens() {
   const [sucesso, setSucesso] = useState("");
   const [mensagemSelecionada, setMensagemSelecionada] = useState(null);
 
-  // Formulário de cadastro / edição
   const [formulario, setFormulario] = useState(formularioVazio);
   const [editandoId, setEditandoId] = useState(null);
   const [salvando, setSalvando] = useState(false);
@@ -106,7 +105,6 @@ function Mensagens() {
 
         setSucesso("Mensagem atualizada com sucesso!");
       } else {
-        // Registra uma mensagem recebida por outro canal (telefone, balcão...)
         const { error } = await supabase.from("mensagens").insert([dados]);
 
         if (error) throw error;
@@ -164,16 +162,19 @@ function Mensagens() {
   return (
     <>
       <header>
-        <h1>Mensagens</h1>
+        <h1>Mensagens - RANGO DOS GURI</h1>
         <a href="/admin">Voltar ao painel</a>
+        <a href="/">Voltar para o site</a>
       </header>
 
       <nav>
+        <a href="/admin">Início</a>
         <a href="/admin/produtos">Produtos</a>
         <a href="/admin/categorias">Categorias</a>
         <a href="/admin/pedidos">Pedidos</a>
         <a href="/admin/clientes">Clientes</a>
-        <a href="/admin/mensagens">Mensagens</a>
+        <a href="/admin/mensagens" className="ativo">Mensagens</a>
+        <a href="/admin/minha-conta">Minha Conta</a>
         <a
           href="#"
           onClick={(event) => {
@@ -244,12 +245,9 @@ function Mensagens() {
             </button>
 
             {editandoId && (
-              <>
-                {" "}
-                <button type="button" onClick={cancelarEdicao}>
-                  Cancelar edição
-                </button>
-              </>
+              <button type="button" onClick={cancelarEdicao}>
+                Cancelar edição
+              </button>
             )}
           </form>
         </section>
@@ -287,9 +285,7 @@ function Mensagens() {
                   <td>{item.email}</td>
                   <td>{formatarData(item.created_at)}</td>
                   <td>
-                    <button
-                      onClick={() => setMensagemSelecionada(item)}
-                    >
+                    <button onClick={() => setMensagemSelecionada(item)}>
                       Visualizar
                     </button>{" "}
                     <button onClick={() => prepararEdicao(item)}>
